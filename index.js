@@ -8,6 +8,7 @@ const clientSecret = process.env.CLIENT_SECRET;
 const twitchUsername = process.env.TWITCH_USERNAME;
 const twitchUserId = process.env.TWITCH_USER_ID;
 
+// Make sure keys are camelCased
 const tokenData = JSON.parse(await fs.readFile(`./tokens.${twitchUserId}.json`, 'utf-8'));
 
 const authProvider = new RefreshingAuthProvider(
@@ -34,3 +35,14 @@ const bot = new Bot({
 		})
 	]
 });
+
+bot.onConnect(() => {
+	console.log('bot has connected!');
+})
+
+bot.onMessage(({ broadcasterName, userDisplayName }) => {
+	console.log('onMessage');
+	bot.say(broadcasterName, `@${userDisplayName} says something`)
+})
+
+console.log('Initialized!');
