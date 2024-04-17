@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { RefreshingAuthProvider } from '@twurple/auth';
 import { Bot, createBotCommand } from '@twurple/easy-bot';
 import { promises as fs } from 'fs';
+import { ApiClient } from '@twurple/api';
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -46,3 +47,11 @@ bot.onMessage(({ broadcasterName, userDisplayName }) => {
 })
 
 console.log('Initialized!');
+
+const apiClient = new ApiClient({ authProvider });
+
+apiClient.predictions.createPrediction(twitchUserId, {
+	title: 'Will Rick win the next game?',
+	outcomes: ['yes', 'no', 'maybe'],
+	autoLockAfter: 60,
+});

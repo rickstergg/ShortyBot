@@ -103,7 +103,7 @@
     "@twurple/common" "7.1.0"
     tslib "^2.0.3"
 
-"@twurple/api@7.1.0":
+"@twurple/api@7.1.0", "@twurple/api@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@twurple/api/-/api-7.1.0.tgz#a46f009c9c681f31e24d94bd6e63d12eec68b77a"
   integrity sha512-cDVVY+vecMFNEOyp7UobQn4ARydIDf04NZy1YCKIKpJHBuOV/pkTjNGluRZ0nR9/t9hBFfOyHAH4JswRZpZbnw==
