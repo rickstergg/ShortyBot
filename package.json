@@ -7,6 +7,8 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@twurple/auth": "^7.1.0",
+    "@twurple/easy-bot": "^7.1.0",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5"
   },
