@@ -41,6 +41,14 @@ const bot = new Bot({
         autoLockAfter: 60,
       });
     }),
+    createBotCommand('poll', async (params, { userName, say }) => {
+      await apiClient.polls.createPoll(twitchUserId, {
+        title: 'Whos fault is it if this poll doesnt work?',
+        duration: 60,
+        choices: ['Rick', 'Faded', 'QQobes33'],
+        channelPointsPerVote: 10,
+      });
+    }),
   ]
 });
 
