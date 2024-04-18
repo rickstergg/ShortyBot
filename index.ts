@@ -1,13 +1,16 @@
 import { ApiClient } from '@twurple/api';
 import { RefreshingAuthProvider } from '@twurple/auth';
-import { Bot, createBotCommand } from '@twurple/easy-bot';
+import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import 'dotenv/config';
 import { promises as fs } from 'fs';
+import { isMod } from './utils/isMod';
 
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
-const twitchUsername = process.env.TWITCH_USERNAME;
-const twitchUserId = process.env.TWITCH_USER_ID;
+const {
+  CLIENT_ID: clientId,
+  CLIENT_SECRET: clientSecret,
+  TWITCH_USER_NAME: twitchUsername,
+  TWITCH_USER_ID: twitchUserId,
+} = process.env;
 
 if (!clientId || !clientSecret) {
   throw Error('Client ID or Client Secret not configured!');
@@ -40,44 +43,37 @@ await authProvider.addUserForToken(tokenData, ['chat']);
 
 const apiClient = new ApiClient({ authProvider });
 
+const predictionHandler = async (_: string[], context: BotCommandContext) => {
+  if (isMod(context)) {
+    await apiClient.predictions.createPrediction(twitchUserId, {
+      title: 'Win the next game?',
+      outcomes: ['Yes', 'No'],
+      autoLockAfter: 60,
+    });
+  } else {
+    context.reply('Only the broadcaster / mods can make predictions ;)');
+  }
+};
+
+const pollHandler = async (params: string[], context: BotCommandContext) => {
+  if (isMod(context)) {
+    await apiClient.polls.createPoll(twitchUserId, {
+      title: "Whose fault is it if this poll doesn't work?",
+      duration: 60,
+      choices: ['Rick', 'Faded', 'QQobes33'],
+      channelPointsPerVote: 10,
+    });
+  } else {
+    context.reply('Only the broadcaster / mods can make polls ;)');
+  }
+};
+
 const bot = new Bot({
   authProvider,
-  channels: [twitchUsername],
+  channel: twitchUsername,
   commands: [
-    createBotCommand('dice', (params, { reply }) => {
-      const diceRoll = Math.floor(Math.random() * 6) + 1;
-      reply(`You rolled a ${diceRoll}`);
-    }),
-    createBotCommand('slap', (params, { userName, say }) => {
-      say(
-        `${userName} slaps ${params.join(' ')} around a bit with a large trout`,
-      );
-    }),
-    createBotCommand('prediction', async (params, { userName, reply }) => {
-      const mods = await bot.getMods(twitchUsername);
-      if (mods.map((mod) => mod.userName).includes(userName)) {
-        await apiClient.predictions.createPrediction(twitchUserId, {
-          title: 'Win the next game?',
-          outcomes: ['Yes', 'No'],
-          autoLockAfter: 60,
-        });
-      } else {
-        reply('Only a mod can make predictions ;)');
-      }
-    }),
-    createBotCommand('poll', async (params, { userName, reply }) => {
-      const mods = await bot.getMods(twitchUsername);
-      if (mods.map((mod) => mod.userName).includes(userName)) {
-        await apiClient.polls.createPoll(twitchUserId, {
-          title: "Whose fault is it if this poll doesn't work?",
-          duration: 60,
-          choices: ['Rick', 'Faded', 'QQobes33'],
-          channelPointsPerVote: 10,
-        });
-      } else {
-        reply('Only a mod can make polls ;)');
-      }
-    }),
+    createBotCommand('prediction', predictionHandler),
+    createBotCommand('poll', pollHandler),
   ],
 });
 
