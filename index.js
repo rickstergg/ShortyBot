@@ -12,16 +12,16 @@ const twitchUserId = process.env.TWITCH_USER_ID;
 // Make sure keys are camelCased
 const tokenData = JSON.parse(await fs.readFile(`./tokens.${twitchUserId}.json`, 'utf-8'));
 
-const authProvider = new RefreshingAuthProvider(
-  {
-    clientId,
-    clientSecret
-  }
-);
+const authProvider = new RefreshingAuthProvider({
+  clientId,
+  clientSecret
+});
 
 authProvider.onRefresh(async (userId, newTokenData) => await fs.writeFile(`./tokens.${userId}.json`, JSON.stringify(newTokenData, null, 4), 'utf-8'));
 
 await authProvider.addUserForToken(tokenData, ['chat']);
+
+const apiClient = new ApiClient({ authProvider });
 
 const bot = new Bot({
   authProvider,
@@ -33,25 +33,26 @@ const bot = new Bot({
     }),
     createBotCommand('slap', (params, { userName, say }) => {
       say(`${userName} slaps ${params.join(' ')} around a bit with a large trout`);
-    })
+    }),
+    createBotCommand('prediction', async (params, { userName, say }) => {
+      await apiClient.predictions.createPrediction(twitchUserId, {
+        title: 'Will Rick win the next game?',
+        outcomes: ['yes', 'no', 'maybe'],
+        autoLockAfter: 60,
+      });
+    }),
   ]
 });
 
-bot.onConnect(() => {
-  console.log('bot has connected!');
-})
-
 bot.onMessage(({ broadcasterName, userDisplayName }) => {
-  console.log('onMessage');
+  console.log('bot onMessage');
   bot.say(broadcasterName, `@${userDisplayName} says something`)
 })
 
-console.log('Initialized!');
+// apiClient.onConnect(() => {
+// 	console.log('Api Client has connected!');
+// });
 
-const apiClient = new ApiClient({ authProvider });
-
-apiClient.predictions.createPrediction(twitchUserId, {
-  title: 'Will Rick win the next game?',
-  outcomes: ['yes', 'no', 'maybe'],
-  autoLockAfter: 60,
-});
+bot.onConnect(() => {
+  console.log('Bot has connected!');
+})
