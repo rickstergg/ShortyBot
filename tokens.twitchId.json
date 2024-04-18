@@ -1,0 +1,15 @@
+{
+  "accessToken": "asdf",
+  "expiresIn": 0,
+  "refreshToken": "tokengg",
+  "scope": [
+    "channel:bot",
+    "channel:manage:broadcast",
+    "channel:manage:moderators",
+    "channel:manage:predictions",
+    "channel:moderate",
+    "chat:edit",
+    "user:bot"
+  ],
+  "tokenType": "bearer"
+}
