@@ -2,6 +2,7 @@ import { ApiClient } from '@twurple/api';
 import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import { Auth } from './auth';
 import { Config } from './config';
+import { ShoutoutManager } from './shoutoutManager';
 import { isMod } from './utils/isMod';
 
 export class ShortyBot {
@@ -9,6 +10,7 @@ export class ShortyBot {
   auth: Auth;
   apiClient: ApiClient;
   bot: Bot;
+  shoutoutManager: ShoutoutManager;
 
   constructor() {
     this.config = new Config();
@@ -16,6 +18,8 @@ export class ShortyBot {
   }
 
   async initialize() {
+    this.shoutoutManager = new ShoutoutManager();
+    await this.shoutoutManager.initialize();
     await this.auth.initializeAuthProvider();
     this.apiClient = new ApiClient({ authProvider: this.auth.authProvider });
     this.bot = new Bot({
@@ -30,9 +34,10 @@ export class ShortyBot {
     this.bot.onConnect(this.onConnect);
   }
 
-  onMessage = ({ broadcasterName, userDisplayName }) => {
-    console.log('bot onMessage');
-    this.bot.say(broadcasterName, `@${userDisplayName} says something`);
+  onMessage = ({ userName }) => {
+    if (this.shoutoutManager.shouldShoutOut(userName)) {
+      this.bot.say(this.config.twitchUserName, `!so ${userName}`);
+    }
   };
 
   onConnect = () => {
