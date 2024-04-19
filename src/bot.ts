@@ -28,6 +28,7 @@ export class ShortyBot {
       commands: [
         createBotCommand('prediction', this.predictionHandler),
         createBotCommand('poll', this.pollHandler),
+        createBotCommand('reset', this.resetHandler),
       ],
     });
     this.bot.onMessage(this.onMessage);
@@ -56,6 +57,15 @@ export class ShortyBot {
       );
     } else {
       context.reply('Only the broadcaster / mods can make predictions ;)');
+    }
+  };
+
+  resetHandler = async (_: string[], context: BotCommandContext) => {
+    if (isMod(context)) {
+      this.shoutoutManager.reset();
+      context.reply('Shoutout reset triggered!');
+    } else {
+      context.reply('Only the broadcaster / mods can reset ;)');
     }
   };
 
