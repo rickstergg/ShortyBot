@@ -1,6 +1,6 @@
 import { AccessToken, RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
-import { Config } from './config';
+import { Config } from './config/config';
 
 export class Auth {
   config: Config;

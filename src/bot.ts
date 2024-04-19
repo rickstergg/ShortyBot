@@ -1,7 +1,7 @@
 import { ApiClient } from '@twurple/api';
 import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import { Auth } from './auth';
-import { Config } from './config';
+import { Config } from './config/config';
 import { ShoutoutManager } from './shoutoutManager';
 import { isMod } from './utils/isMod';
 import { randomQuote, shuffleNames } from './utils/thanos';
