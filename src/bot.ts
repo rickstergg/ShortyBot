@@ -26,7 +26,18 @@ export class ShortyBot {
         createBotCommand('poll', this.pollHandler),
       ],
     });
+    this.bot.onMessage(this.onMessage);
+    this.bot.onConnect(this.onConnect);
   }
+
+  onMessage = ({ broadcasterName, userDisplayName }) => {
+    console.log('bot onMessage');
+    this.bot.say(broadcasterName, `@${userDisplayName} says something`);
+  };
+
+  onConnect = () => {
+    console.log('Bot is connected!');
+  };
 
   predictionHandler = async (_: string[], context: BotCommandContext) => {
     if (isMod(context)) {
