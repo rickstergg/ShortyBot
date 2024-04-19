@@ -21,9 +21,8 @@ export class ShortyBot {
   }
 
   async initialize() {
-    this.shoutoutManager = new ShoutoutManager();
-    await this.shoutoutManager.initialize();
     await this.auth.initializeAuthProvider();
+
     this.apiClient = new ApiClient({ authProvider: this.auth.authProvider });
     this.bot = new Bot({
       authProvider: this.auth.authProvider,
@@ -39,9 +38,13 @@ export class ShortyBot {
         requestMembershipEvents: true,
       },
     });
+
     this.bot.onMessage(this.onMessage);
     this.bot.onConnect(this.onConnect);
     this.bot.chat.onJoin(this.joinHandler);
+
+    this.shoutoutManager = new ShoutoutManager();
+    await this.shoutoutManager.initialize();
   }
 
   onMessage = ({ userName }) => {
