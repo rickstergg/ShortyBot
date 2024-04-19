@@ -7,8 +7,6 @@ export class Config {
   twitchUserId: string;
 
   constructor() {
-    console.log('Checking env vars..');
-
     const {
       CLIENT_ID: clientId,
       CLIENT_SECRET: clientSecret,
@@ -28,7 +26,5 @@ export class Config {
     this.clientSecret = clientSecret;
     this.twitchUserName = twitchUsername;
     this.twitchUserId = twitchUserId;
-
-    console.log('Config initialized properly!');
   }
 }
