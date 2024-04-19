@@ -11,10 +11,12 @@ export class ShortyBot {
   apiClient: ApiClient;
   bot: Bot;
   shoutoutManager: ShoutoutManager;
+  users: string[];
 
   constructor() {
     this.config = new Config();
     this.auth = new Auth(this.config);
+    this.users = [];
   }
 
   async initialize() {
@@ -29,10 +31,15 @@ export class ShortyBot {
         createBotCommand('prediction', this.predictionHandler),
         createBotCommand('poll', this.pollHandler),
         createBotCommand('reset', this.resetHandler),
+        createBotCommand('users', this.userHandler),
       ],
+      chatClientOptions: {
+        requestMembershipEvents: true,
+      },
     });
     this.bot.onMessage(this.onMessage);
     this.bot.onConnect(this.onConnect);
+    this.bot.chat.onJoin(this.joinHandler);
   }
 
   onMessage = ({ userName }) => {
@@ -42,10 +49,21 @@ export class ShortyBot {
   };
 
   onConnect = () => {
-    console.log('Bot is connected!');
+    console.log('Bot is connected to chat!');
   };
 
-  predictionHandler = async (_: string[], context: BotCommandContext) => {
+  joinHandler = (_channel: string, user: string) => {
+    if (!this.users.includes(user)) {
+      console.log(user);
+      this.users.push(user);
+    }
+  };
+
+  userHandler = async (_params: string[], _context: BotCommandContext) => {
+    console.log(this.users.join(','));
+  };
+
+  predictionHandler = async (_params: string[], context: BotCommandContext) => {
     if (isMod(context)) {
       await this.apiClient.predictions.createPrediction(
         this.config.twitchUserId,
@@ -60,7 +78,7 @@ export class ShortyBot {
     }
   };
 
-  resetHandler = async (_: string[], context: BotCommandContext) => {
+  resetHandler = async (_params: string[], context: BotCommandContext) => {
     if (isMod(context)) {
       this.shoutoutManager.reset();
       context.reply('Shoutout reset triggered!');
@@ -69,7 +87,7 @@ export class ShortyBot {
     }
   };
 
-  pollHandler = async (params: string[], context: BotCommandContext) => {
+  pollHandler = async (_params: string[], context: BotCommandContext) => {
     if (isMod(context)) {
       await this.apiClient.polls.createPoll(this.config.twitchUserId, {
         title: "Whose fault is it if this poll doesn't work?",
