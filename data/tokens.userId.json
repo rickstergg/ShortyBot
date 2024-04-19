@@ -10,7 +10,8 @@
     "channel:moderate",
     "chat:read",
     "chat:edit",
-    "user:bot"
+    "user:bot",
+    "moderator:manage:banned_users"
   ],
   "tokenType": "bearer"
 }

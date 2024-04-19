@@ -21,6 +21,7 @@ Scopes (disclaimer, I'm just summarizing stuff, best to look at actual Twitch sc
 - channel:moderate (to be a moderator / delete messages / anti-spam capabilities)
 - channel:manage:predictions (for easy predictions)
 - channel:manage:broadcast (for stream markers and clips)
+- moderator:manage:banned_users (for thanos, and banning bots)
 
 ## Setup
 

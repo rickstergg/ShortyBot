@@ -4,6 +4,7 @@ import { Auth } from './auth';
 import { Config } from './config';
 import { ShoutoutManager } from './shoutoutManager';
 import { isMod } from './utils/isMod';
+import { randomQuote, shuffleNames } from './utils/thanos';
 
 export class ShortyBot {
   config: Config;
@@ -32,6 +33,7 @@ export class ShortyBot {
         createBotCommand('poll', this.pollHandler),
         createBotCommand('reset', this.resetHandler),
         createBotCommand('users', this.userHandler),
+        createBotCommand('thanos', this.thanosHandler),
       ],
       chatClientOptions: {
         requestMembershipEvents: true,
@@ -52,9 +54,21 @@ export class ShortyBot {
     console.log('Bot is connected to chat!');
   };
 
+  thanosHandler = async (_params: string[], _context: BotCommandContext) => {
+    const usersToSnap = shuffleNames(this.users);
+
+    await Promise.all(
+      usersToSnap.map((username) => {
+        this.bot.timeout(this.config.twitchUserName, username, 5);
+      }),
+    );
+
+    this.bot.say(this.config.twitchUserName, randomQuote());
+  };
+
   joinHandler = (_channel: string, user: string) => {
     if (!this.users.includes(user)) {
-      console.log(user);
+      // Exempt certain users / bots.
       this.users.push(user);
     }
   };
