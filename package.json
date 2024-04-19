@@ -1,8 +1,8 @@
 {
-  "name": "maxbot",
+  "name": "shortybot",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:rickstergg/MaxBot.git",
+  "repository": "git@github.com:rickstergg/ShortyBot.git",
   "author": "Rick Zhang <rickzhang@live.ca>",
   "license": "MIT",
   "type": "module",
