@@ -1,6 +1,6 @@
 import { AccessToken, RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
-import { Config } from './config/config';
+import { Config } from './config';
 
 export class Auth {
   config: Config;
@@ -11,7 +11,6 @@ export class Auth {
   }
 
   async initializeAuthProvider() {
-    console.log('Initializing auth provider..');
     const tokenData: AccessToken = JSON.parse(
       await fs.readFile(
         `./data/tokens.${this.config.twitchUserId}.json`,
@@ -34,6 +33,5 @@ export class Auth {
     );
 
     await this.authProvider.addUserForToken(tokenData, ['chat']);
-    console.log('Auth provider initialized!');
   }
 }
