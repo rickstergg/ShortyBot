@@ -55,3 +55,8 @@ Ensure that the keys you provide in the .json file are camel case instead of sna
 ## Run It Down
 
 Now that you're ready to go, make sure you `yarn install` and then `yarn start`.
+
+# Adding streamers to the shoutout list.
+
+- Rename `data/streamers.example.json` to `data/streamers.json`. This is the file responsible for providing the list of streamer names (lowercased and such, to shoutout).
+- If you run the program and it says this list is empty, chances are you either forgot to include this list, or just haven't added anybody to it. It shouldn't break, but this is noteworthy for sure.
