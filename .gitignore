@@ -1,4 +1,4 @@
 node_modules
-.env
-data/tokens.*.json
+prod.env
 data/streamers.json
+data/tokens.*.json

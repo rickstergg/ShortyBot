@@ -1,4 +1,9 @@
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+dotenv.config({
+  path: path.resolve(__dirname, `../${process.env.ENVIRONMENT}.env`),
+});
 
 export class Config {
   clientId: string;
