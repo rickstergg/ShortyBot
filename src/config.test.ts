@@ -28,7 +28,7 @@ describe('config', () => {
 
         expect(() => {
           new Config();
-        }).toThrowError(Error('Client Id or Secret is undefined!'));
+        }).toThrowError(Error('ClientId or ClientSecret is undefined!'));
       });
 
       it('should throw an error regarding twitch id / username', () => {
@@ -36,7 +36,7 @@ describe('config', () => {
 
         expect(() => {
           new Config();
-        }).toThrowError(Error('Twitch Username or Id is undefined!'));
+        }).toThrowError(Error('TwitchUserName or TwitchUserId is undefined!'));
       });
     });
   });
