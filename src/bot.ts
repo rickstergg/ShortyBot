@@ -63,7 +63,7 @@ export class ShortyBot {
       this.config.twitchUserName,
       `HOLY THANK YOU @${userName} for the BIG RAID of ${viewerCount}!`,
     );
-    this.bot.say(this.config.twitchUserName, `!so @${userName}!`);
+    this.bot.say(this.config.twitchUserName, `!so @${userName}`);
   };
 
   thanosHandler = async (_params: string[], _context: BotCommandContext) => {
