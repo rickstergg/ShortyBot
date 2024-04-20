@@ -12,6 +12,8 @@ export class Config {
   clientSecret: string;
   twitchUserName: string;
   twitchUserId: string;
+  accessToken: string;
+  refreshToken: string;
 
   constructor() {
     const {
@@ -19,6 +21,8 @@ export class Config {
       CLIENT_SECRET: clientSecret,
       TWITCH_USER_NAME: twitchUsername,
       TWITCH_USER_ID: twitchUserId,
+      ACCESS_TOKEN: accessToken,
+      REFRESH_TOKEN: refreshToken,
     } = process.env;
 
     if (!clientId || !clientSecret) {
@@ -29,18 +33,16 @@ export class Config {
       throw Error('TwitchUserName or TwitchUserId is undefined!');
     }
 
+    if (!accessToken || !refreshToken) {
+      throw Error('AccessToken or RefreshToken is undefined!');
+    }
+
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.twitchUserName = twitchUsername;
     this.twitchUserId = twitchUserId;
-  }
-
-  async checkTokenFile(): Promise<boolean> {
-    const buffer = await fs.readFile(
-      `./data/tokens.${this.twitchUserId}.json`,
-      'utf-8',
-    );
-    return buffer.length === 0;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
   }
 
   async writeTokenFile() {

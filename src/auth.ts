@@ -13,10 +13,7 @@ export class Auth {
   async initializeAuthProvider() {
     if (process.env.ENVIRONMENT === 'prod') {
       // if we're in prod, write the tokens file.
-      const exists = await this.config.checkTokenFile();
-      if (!exists) {
-        await this.config.writeTokenFile();
-      }
+      await this.config.writeTokenFile();
     }
 
     const tokenData: AccessToken = JSON.parse(

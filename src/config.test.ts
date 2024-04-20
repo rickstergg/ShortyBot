@@ -12,6 +12,8 @@ describe('config', () => {
         expect(config.clientSecret).toBeDefined();
         expect(config.twitchUserId).toBeDefined();
         expect(config.twitchUserName).toBeDefined();
+        expect(config.accessToken).toBeDefined();
+        expect(config.refreshToken).toBeDefined();
       });
     });
 
@@ -37,6 +39,14 @@ describe('config', () => {
         expect(() => {
           new Config();
         }).toThrowError(Error('TwitchUserName or TwitchUserId is undefined!'));
+      });
+
+      it('should throw an error regarding access / refresh tokens', () => {
+        delete process.env.REFRESH_TOKEN;
+
+        expect(() => {
+          new Config();
+        }).toThrowError(Error('AccessToken or RefreshToken is undefined!'));
       });
     });
   });
