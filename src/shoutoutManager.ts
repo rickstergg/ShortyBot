@@ -1,13 +1,12 @@
 import { promises as fs } from 'fs';
+import { streamerPath } from './constants/directories';
 
 export class ShoutoutManager {
   streamerList: string[];
   streamers: Set<string>;
 
   async initialize() {
-    const streamerList = JSON.parse(
-      await fs.readFile('./data/streamers.json', 'utf-8'),
-    );
+    const streamerList = JSON.parse(await fs.readFile(streamerPath, 'utf-8'));
 
     this.streamerList = streamerList.streamers;
     this.streamers = new Set(this.streamerList);

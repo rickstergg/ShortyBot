@@ -1,6 +1,7 @@
 import { AccessToken, RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
 import { Config } from './config';
+import { tokenPath } from './constants/directories';
 
 export class Auth {
   config: Config;
@@ -17,10 +18,7 @@ export class Auth {
     }
 
     const tokenData: AccessToken = JSON.parse(
-      await fs.readFile(
-        `./data/tokens.${this.config.twitchUserId}.json`,
-        'utf-8',
-      ),
+      await fs.readFile(tokenPath(this.config.twitchUserId), 'utf-8'),
     );
 
     this.authProvider = new RefreshingAuthProvider({
@@ -29,10 +27,10 @@ export class Auth {
     });
 
     this.authProvider.onRefresh(
-      async (userId, newTokenData) =>
+      async (twitchUserId, newTokenData) =>
         await fs.writeFile(
-          `./data/tokens.${userId}.json`,
-          JSON.stringify(newTokenData, null, 4),
+          tokenPath(twitchUserId),
+          JSON.stringify(newTokenData, null, 2),
           'utf-8',
         ),
     );
