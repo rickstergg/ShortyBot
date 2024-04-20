@@ -71,7 +71,5 @@ describe('Auth', () => {
       expect(onRefresh).toHaveBeenCalled();
       expect(addUserForToken).toHaveBeenCalled();
     });
-
-    // it('')
   });
 });
