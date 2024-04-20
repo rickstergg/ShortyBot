@@ -41,6 +41,7 @@ export class ShortyBot {
 
     this.bot.onMessage(this.onMessage);
     this.bot.onConnect(this.onConnect);
+    this.bot.onRaid(this.raidhandler);
     this.bot.chat.onJoin(this.joinHandler);
 
     this.shoutoutManager = new ShoutoutManager();
@@ -55,6 +56,10 @@ export class ShortyBot {
 
   onConnect = () => {
     console.log('Bot is connected to chat!');
+  };
+
+  raidhandler = (event) => {
+    console.log(event);
   };
 
   thanosHandler = async (_params: string[], _context: BotCommandContext) => {
