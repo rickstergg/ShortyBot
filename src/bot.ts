@@ -58,8 +58,12 @@ export class ShortyBot {
     console.log('Bot is connected to chat!');
   };
 
-  raidhandler = (event) => {
-    console.log(event);
+  raidhandler = ({ userName, viewerCount }) => {
+    this.bot.say(
+      this.config.twitchUserName,
+      `HOLY THANK YOU @${userName} for the BIG RAID of ${viewerCount}!`,
+    );
+    this.bot.say(this.config.twitchUserName, `!so @${userName}!`);
   };
 
   thanosHandler = async (_params: string[], _context: BotCommandContext) => {
