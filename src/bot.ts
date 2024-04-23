@@ -2,7 +2,7 @@ import { ApiClient } from '@twurple/api';
 import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import { Auth } from './auth';
 import { Config } from './config';
-import { ShoutoutManager } from './shoutoutManager';
+import { Shoutouts } from './shoutouts';
 import { isMod } from './utils/isMod';
 import { randomQuote, shuffleNames } from './utils/thanos';
 
@@ -11,7 +11,7 @@ export class ShortyBot {
   auth: Auth;
   apiClient: ApiClient;
   bot: Bot;
-  shoutoutManager: ShoutoutManager;
+  shoutouts: Shoutouts;
   users: string[];
 
   constructor() {
@@ -44,12 +44,12 @@ export class ShortyBot {
     this.bot.onRaid(this.raidhandler);
     this.bot.chat.onJoin(this.joinHandler);
 
-    this.shoutoutManager = new ShoutoutManager();
-    await this.shoutoutManager.initialize();
+    this.shoutouts = new Shoutouts();
+    await this.shoutouts.initialize();
   }
 
   onMessage = ({ userName }) => {
-    if (this.shoutoutManager.shouldShoutOut(userName)) {
+    if (this.shoutouts.shouldShoutOut(userName)) {
       this.bot.say(this.config.twitchUserName, `!so ${userName}`);
     }
   };
@@ -106,7 +106,7 @@ export class ShortyBot {
 
   resetHandler = async (_params: string[], context: BotCommandContext) => {
     if (isMod(context)) {
-      this.shoutoutManager.reset();
+      this.shoutouts.reset();
       context.reply('Shoutout reset triggered!');
     } else {
       context.reply('Only the broadcaster / mods can reset ;)');

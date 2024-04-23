@@ -1,28 +1,28 @@
 import { promises as fs } from 'fs';
 import { streamerPath } from './constants/directories';
 
-export class ShoutoutManager {
+export class Shoutouts {
   streamerList: string[];
-  streamers: Set<string>;
+  streamersToShoutout: Set<string>;
 
   async initialize() {
     const streamerList = JSON.parse(await fs.readFile(streamerPath, 'utf-8'));
 
     this.streamerList = streamerList.streamers;
-    this.streamers = new Set(this.streamerList);
+    this.streamersToShoutout = new Set(this.streamerList);
 
-    if (!this.streamers.size) {
+    if (!this.streamersToShoutout.size) {
       console.log('streamers list is empty!');
     }
   }
 
   reset() {
-    this.streamers = new Set(this.streamerList);
+    this.streamersToShoutout = new Set(this.streamerList);
   }
 
   shouldShoutOut(userName: string) {
-    if (this.streamers.has(userName)) {
-      this.streamers.delete(userName);
+    if (this.streamersToShoutout.has(userName)) {
+      this.streamersToShoutout.delete(userName);
       return true;
     }
     return false;
