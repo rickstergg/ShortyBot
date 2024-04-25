@@ -54,7 +54,7 @@ Once you authorize, ACCESS_TOKEN and REFRESH_TOKEN will be filled out here.
 
 ### Authorize your App.
 
-Head over to this [link](https://id.twitch.tv/oauth2/authorize?client_id=YOUR_CLIENT_ID_HERE&scope=channel:bot+channel:moderate+chat:edit+chat:read+channel:manage:predictions+channel:manage:broadcast+user:bot+moderator:manage:banned_users&response_type=code&redirect_uri=http://localhost&force_verify=true), replacing the `YOUR_CLIENT_ID_HERE` with the Client ID you got from your created Application.
+Head over to this [link](https://id.twitch.tv/oauth2/authorize?client_id=YOUR_CLIENT_ID_HERE&scope=channel:bot+channel:moderate+chat:edit+chat:read+channel:manage:predictions+channel:manage:broadcast+user:bot+moderator:manage:banned_users+clips:edit&response_type=code&redirect_uri=http://localhost&force_verify=true), replacing the `YOUR_CLIENT_ID_HERE` with the Client ID you got from your created Application.
 
 You'll now see an authorization page, where you can click `Authorize`. You are authorizing the account you're logged in as to be accessed by your own Application.
 

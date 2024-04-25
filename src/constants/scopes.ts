@@ -7,4 +7,5 @@ export const scopes = [
   'chat:read',
   'moderator:manage:banned_users',
   'user:bot',
+  'clips:edit',
 ];
