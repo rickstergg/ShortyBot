@@ -8,6 +8,7 @@
   "type": "module",
   "dependencies": {
     "@twurple/api": "^7.1.0",
+    "@twurple/api-call": "^7.1.0",
     "@twurple/auth": "^7.1.0",
     "@twurple/easy-bot": "^7.1.0",
     "dotenv": "^16.4.5",
