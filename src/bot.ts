@@ -5,7 +5,7 @@ import { Auth } from './auth';
 import { Config } from './config';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
-import { isMod } from './utils/isMod';
+import { isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
 
 export class ShortyBot {
