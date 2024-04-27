@@ -6,7 +6,7 @@ import { Config } from './config';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
 import { isMod } from './utils/isMod';
-import { randomQuote, shuffleNames } from './utils/thanos';
+import { randomQuote, shuffleChatters } from './utils/thanos';
 
 export class ShortyBot {
   config: Config;
@@ -14,14 +14,12 @@ export class ShortyBot {
   apiClient: ApiClient;
   bot: Bot;
   shoutouts: Shoutouts;
-  users: string[];
   prediction?: HelixPrediction;
   poll?: HelixPoll;
 
   constructor() {
     this.config = new Config();
     this.auth = new Auth(this.config);
-    this.users = [];
 
     this.prediction = undefined;
     this.poll = undefined;
@@ -38,7 +36,6 @@ export class ShortyBot {
         createBotCommand('prediction', this.predictionHandler),
         createBotCommand('poll', this.pollHandler),
         createBotCommand('reset', this.resetHandler),
-        createBotCommand('users', this.userHandler),
         createBotCommand('thanos', this.thanosHandler),
         createBotCommand('cancel', this.cancelHandler),
       ],
@@ -67,16 +64,16 @@ export class ShortyBot {
   };
 
   cancelHandler = async (_params: string[], context: BotCommandContext) => {
+    if (!isMod(context)) {
+      context.reply('Only the broadcaster / mods can make predictions ;)');
+      return;
+    }
+
     if (this.prediction) {
       await this.apiClient.predictions
         .cancelPrediction(this.config.twitchUserId, this.prediction.id)
         .then(() => {
-          this.bot.reply(
-            this.config.twitchUserName,
-            'Prediction cancelled!',
-            context.msg.id,
-          );
-
+          context.reply('Prediction cancelled!');
           this.prediction = undefined;
         });
     }
@@ -85,19 +82,13 @@ export class ShortyBot {
       await this.apiClient.polls
         .endPoll(this.config.twitchUserId, this.poll.id, true)
         .then(() => {
-          this.bot.reply(
-            this.config.twitchUserName,
-            'Poll cancelled!',
-            context.msg.id,
-          );
-
+          context.reply('Poll cancelled!');
           this.poll = undefined;
         });
     }
 
     if (!this.poll || !this.prediction) {
-      this.bot.say(
-        this.config.twitchUserName,
+      context.reply(
         'Nothing to cancel! If a prediction or poll was made without shorty bot, please cancel it manually.',
       );
     }
@@ -111,12 +102,19 @@ export class ShortyBot {
     this.bot.say(this.config.twitchUserName, `!so @${userName}`);
   };
 
-  thanosHandler = async (_params: string[], _context: BotCommandContext) => {
-    const usersToSnap = shuffleNames(this.users);
+  thanosHandler = async (_params: string[], context: BotCommandContext) => {
+    if (!isMod(context)) {
+      context.reply('Only the broadcaster can snap ;)');
+    }
 
+    const { data: chatters } = await this.bot.api.chat.getChatters(
+      this.config.twitchUserId,
+    );
+
+    const usersToSnap = shuffleChatters(chatters).slice(0, chatters.length / 2);
     await Promise.all(
-      usersToSnap.map((username) => {
-        this.bot.timeout(this.config.twitchUserName, username, 5);
+      usersToSnap.map((chatter) => {
+        this.bot.timeout(this.config.twitchUserName, chatter.userName, 5);
       }),
     );
 
@@ -124,54 +122,49 @@ export class ShortyBot {
   };
 
   joinHandler = (_channel: string, user: string) => {
-    if (!this.users.includes(user)) {
-      // Exempt certain users / bots.
-      this.users.push(user);
-    }
-  };
-
-  userHandler = async (_params: string[], _context: BotCommandContext) => {
-    console.log(this.users.join(','));
+    console.log(user, ' has joined chat!');
   };
 
   resetHandler = async (_params: string[], context: BotCommandContext) => {
-    if (isMod(context)) {
-      this.shoutouts.reset();
-      context.reply('Shoutout reset triggered!');
-    } else {
+    if (!isMod(context)) {
       context.reply('Only the broadcaster / mods can reset ;)');
     }
+
+    this.shoutouts.reset();
+    context.reply('Shoutout reset triggered!');
   };
 
   predictionHandler = async (_params: string[], context: BotCommandContext) => {
-    if (isMod(context)) {
-      await this.apiClient.predictions
-        .createPrediction(this.config.twitchUserId, {
-          title: 'Win the next game?',
-          outcomes: ['Yes', 'No'],
-          autoLockAfter: 60,
-        })
-        .then((resp) => (this.prediction = resp))
-        .catch((e) => this.errorHandler(e, context.msg.id));
-    } else {
+    if (!isMod(context)) {
       context.reply('Only the broadcaster / mods can make predictions ;)');
+      return;
     }
+
+    await this.apiClient.predictions
+      .createPrediction(this.config.twitchUserId, {
+        title: 'Win the next game?',
+        outcomes: ['Yes', 'No'],
+        autoLockAfter: 60,
+      })
+      .then((resp) => (this.prediction = resp))
+      .catch((e) => this.errorHandler(e, context.msg.id));
   };
 
   pollHandler = async (_params: string[], context: BotCommandContext) => {
-    if (isMod(context)) {
-      await this.apiClient.polls
-        .createPoll(this.config.twitchUserId, {
-          title: "Whose fault is it if this poll doesn't work?",
-          duration: 60,
-          choices: ['Rick', 'Faded', 'QQobes33'],
-          channelPointsPerVote: 10,
-        })
-        .then((resp) => (this.poll = resp))
-        .catch((e) => this.errorHandler(e, context.msg.id));
-    } else {
+    if (!isMod(context)) {
       context.reply('Only the broadcaster / mods can make polls ;)');
+      return;
     }
+
+    await this.apiClient.polls
+      .createPoll(this.config.twitchUserId, {
+        title: "Whose fault is it if this poll doesn't work?",
+        duration: 60,
+        choices: ['Rick', 'Faded', 'QQobes33'],
+        channelPointsPerVote: 10,
+      })
+      .then((resp) => (this.poll = resp))
+      .catch((e) => this.errorHandler(e, context.msg.id));
   };
 
   errorHandler = async (e: Error, messageId: string) => {

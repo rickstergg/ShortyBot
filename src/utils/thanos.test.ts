@@ -1,14 +1,34 @@
 import { describe, expect, it } from '@jest/globals';
-import { quotes, randomQuote, shuffleNames } from './thanos';
+import { HelixChatChatter } from '@twurple/api';
+import { quotes, randomQuote, shuffleChatters } from './thanos';
 
 describe('thanos', () => {
-  describe('shuffleNames', () => {
-    it('should return true', () => {
-      const users = ['rickstergg', 'fadeddice', 'qqobes33'];
-      const shuffledUsers = shuffleNames(users);
+  describe('shuffleChatters', () => {
+    it('should return the same array if sorted', () => {
+      const chatters = [
+        {
+          userId: '123',
+          userDisplayName: 'RicksterGG',
+          userName: 'rickstergg',
+        },
+        {
+          userId: '456',
+          userDisplayName: 'FadedDice',
+          userName: 'fadeddice',
+        },
+        {
+          userId: '789',
+          userDisplayName: 'QQobes33',
+          userName: 'qqobes33',
+        },
+      ] as HelixChatChatter[];
+
+      const shuffledChatters = shuffleChatters(chatters);
 
       // Should be the same at the end of the day.
-      expect(users.sort()).toStrictEqual(shuffledUsers.sort());
+      expect(chatters.map((c) => c.userName).sort()).toStrictEqual(
+        shuffledChatters.map((c) => c.userName).sort(),
+      );
     });
   });
 
