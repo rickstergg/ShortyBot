@@ -5,7 +5,7 @@ import { Auth } from './auth';
 import { Config } from './config';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
-import { isMod } from './utils/permissions';
+import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
 
 export class ShortyBot {
@@ -64,8 +64,8 @@ export class ShortyBot {
   };
 
   cancelHandler = async (_params: string[], context: BotCommandContext) => {
-    if (!isMod(context)) {
-      context.reply('Only the broadcaster / mods can make predictions ;)');
+    if (!isBroadcaster(context)) {
+      context.reply('Only the broadcaster can cancel! ;)');
       return;
     }
 
@@ -89,7 +89,7 @@ export class ShortyBot {
 
     if (!this.poll || !this.prediction) {
       context.reply(
-        'Nothing to cancel! If a prediction or poll was made without shorty bot, please cancel it manually.',
+        'Nothing to cancel! If a prediction or poll was made without ShortyBot, please cancel it manually.',
       );
     }
   };
