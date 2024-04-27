@@ -83,7 +83,7 @@ export class ShortyBot {
 
     if (this.poll) {
       await this.apiClient.polls
-        .endPoll(this.config.twitchUserId, this.poll.id)
+        .endPoll(this.config.twitchUserId, this.poll.id, true)
         .then(() => {
           this.bot.reply(
             this.config.twitchUserName,
