@@ -28,7 +28,6 @@ export class ShortyBot {
   async initialize() {
     await this.auth.initializeAuthProvider();
 
-    this.apiClient = new ApiClient({ authProvider: this.auth.authProvider });
     this.bot = new Bot({
       authProvider: this.auth.authProvider,
       channel: this.config.twitchUserName,
@@ -43,6 +42,8 @@ export class ShortyBot {
         requestMembershipEvents: true,
       },
     });
+
+    this.apiClient = this.bot.api;
 
     this.bot.onMessage(this.onMessage);
     this.bot.onConnect(this.onConnect);
@@ -64,8 +65,15 @@ export class ShortyBot {
   };
 
   cancelHandler = async (_params: string[], context: BotCommandContext) => {
-    if (!isBroadcaster(context)) {
-      context.reply('Only the broadcaster can cancel! ;)');
+    if (!isMod(context)) {
+      context.reply('Only the broadcaster / mods can cancel!');
+      return;
+    }
+
+    if (!this.poll && !this.prediction) {
+      context.reply(
+        'Nothing to cancel! If a prediction or poll was made without ShortyBot, please cancel it manually.',
+      );
       return;
     }
 
@@ -86,12 +94,6 @@ export class ShortyBot {
           this.poll = undefined;
         });
     }
-
-    if (!this.poll || !this.prediction) {
-      context.reply(
-        'Nothing to cancel! If a prediction or poll was made without ShortyBot, please cancel it manually.',
-      );
-    }
   };
 
   raidhandler = ({ userName, viewerCount }) => {
@@ -103,8 +105,9 @@ export class ShortyBot {
   };
 
   thanosHandler = async (_params: string[], context: BotCommandContext) => {
-    if (!isMod(context)) {
+    if (!isBroadcaster(context)) {
       context.reply('Only the broadcaster can snap ;)');
+      return;
     }
 
     const { data: chatters } = await this.bot.api.chat.getChatters(
@@ -126,28 +129,54 @@ export class ShortyBot {
   };
 
   resetHandler = async (_params: string[], context: BotCommandContext) => {
-    if (!isMod(context)) {
-      context.reply('Only the broadcaster / mods can reset ;)');
+    if (!isBroadcaster(context)) {
+      context.reply('Only the broadcaster can reset!');
+      return;
     }
 
     this.shoutouts.reset();
     context.reply('Shoutout reset triggered!');
   };
 
-  predictionHandler = async (_params: string[], context: BotCommandContext) => {
+  predictionHandler = async (params: string[], context: BotCommandContext) => {
     if (!isMod(context)) {
-      context.reply('Only the broadcaster / mods can make predictions ;)');
+      context.reply(
+        'Only the broadcaster / mods can make and resolve predictions!',
+      );
       return;
     }
 
-    await this.apiClient.predictions
-      .createPrediction(this.config.twitchUserId, {
-        title: 'Win the next game?',
-        outcomes: ['Yes', 'No'],
-        autoLockAfter: 60,
-      })
-      .then((resp) => (this.prediction = resp))
-      .catch((e) => this.errorHandler(e, context.msg.id));
+    if (this.prediction) {
+      if (params.length === 2 && params[0].toLowerCase() === 'resolve') {
+        const outcomeIndex = parseInt(params[1]);
+        if (
+          outcomeIndex > this.prediction.outcomes.length ||
+          outcomeIndex < 1
+        ) {
+          context.reply(
+            `Invalid index, choose a number between 1 and ${this.prediction.outcomes.length}!`,
+          );
+        }
+        await this.apiClient.predictions.resolvePrediction(
+          this.config.twitchUserId,
+          this.prediction.id,
+          this.prediction.outcomes[outcomeIndex - 1].id,
+        );
+      } else {
+        context.reply(
+          "Usage: '!prediction resolve 2' will resolve the prediction with the second outcome.",
+        );
+      }
+    } else {
+      await this.apiClient.predictions
+        .createPrediction(this.config.twitchUserId, {
+          title: 'Win the next game?',
+          outcomes: ['Yes', 'No'],
+          autoLockAfter: 60,
+        })
+        .then((prediction) => (this.prediction = prediction))
+        .catch((e) => this.errorHandler(e, context.msg.id));
+    }
   };
 
   pollHandler = async (_params: string[], context: BotCommandContext) => {
@@ -163,7 +192,7 @@ export class ShortyBot {
         choices: ['Rick', 'Faded', 'QQobes33'],
         channelPointsPerVote: 10,
       })
-      .then((resp) => (this.poll = resp))
+      .then((poll) => (this.poll = poll))
       .catch((e) => this.errorHandler(e, context.msg.id));
   };
 
