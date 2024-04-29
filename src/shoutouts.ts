@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import { streamerPath } from './constants/directories';
+import { streamerPath } from './utils/directories';
 
 export class Shoutouts {
   streamerList: string[];

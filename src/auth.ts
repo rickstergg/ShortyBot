@@ -1,7 +1,7 @@
 import { AccessToken, RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
 import { Config } from './config';
-import { tokenPath } from './constants/directories';
+import { tokenPath } from './utils/directories';
 
 export class Auth {
   config: Config;

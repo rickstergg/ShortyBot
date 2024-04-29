@@ -8,6 +8,7 @@ import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
 import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
+import { clipEditUrl } from './utils/urls';
 import { validatePredictionParams } from './utils/validParams';
 
 export class ShortyBot {
@@ -39,6 +40,7 @@ export class ShortyBot {
         createBotCommand('reset', this.resetHandler),
         createBotCommand('thanos', this.thanosHandler),
         createBotCommand('cancel', this.cancelHandler),
+        createBotCommand('clip', this.clipHandler),
       ],
       chatClientOptions: {
         requestMembershipEvents: true,
@@ -64,6 +66,18 @@ export class ShortyBot {
 
   onConnect = () => {
     console.log('Bot is connected to chat!');
+  };
+
+  clipHandler = async (_params: string[], context: BotCommandContext) => {
+    await this.apiClient.clips
+      .createClip({
+        channel: this.config.twitchUserId,
+        createAfterDelay: false,
+      })
+      .then((clipId) => {
+        context.reply(`You may edit the clip here: ${clipEditUrl(clipId)}`);
+      })
+      .catch((e) => this.errorHandler(e, context.msg.id));
   };
 
   cancelHandler = async (_params: string[], context: BotCommandContext) => {
@@ -202,6 +216,7 @@ export class ShortyBot {
   };
 
   errorHandler = async (e: Error, messageId: string) => {
+    console.log(e);
     if (e instanceof HttpStatusCodeError) {
       const errorJson: ErrorJSON = JSON.parse(e.body);
       this.bot.reply(this.config.twitchUserName, errorJson.message, messageId);
