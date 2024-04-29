@@ -125,7 +125,7 @@ export class ShortyBot {
           return this.bot.timeout(
             this.config.twitchUserName,
             chatter.userName,
-            5,
+            15,
           );
         }
       }),
