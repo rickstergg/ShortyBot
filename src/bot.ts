@@ -3,10 +3,12 @@ import { HttpStatusCodeError } from '@twurple/api-call';
 import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import { Auth } from './auth';
 import { Config } from './config';
+import { exemptChatters } from './constants/exemptChatters';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
 import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
+import { validatePredictionParams } from './utils/validParams';
 
 export class ShortyBot {
   config: Config;
@@ -117,7 +119,15 @@ export class ShortyBot {
     const usersToSnap = shuffleChatters(chatters).slice(0, chatters.length / 2);
     await Promise.all(
       usersToSnap.map((chatter) => {
-        this.bot.timeout(this.config.twitchUserName, chatter.userName, 5);
+        if (exemptChatters.includes(chatter.userName)) {
+          return Promise.resolve('exempt');
+        } else {
+          return this.bot.timeout(
+            this.config.twitchUserName,
+            chatter.userName,
+            5,
+          );
+        }
       }),
     );
 
@@ -147,36 +157,31 @@ export class ShortyBot {
     }
 
     if (this.prediction) {
-      if (params.length === 2 && params[0].toLowerCase() === 'resolve') {
-        const outcomeIndex = parseInt(params[1]);
-        if (
-          outcomeIndex > this.prediction.outcomes.length ||
-          outcomeIndex < 1
-        ) {
-          context.reply(
-            `Invalid index, choose a number between 1 and ${this.prediction.outcomes.length}!`,
-          );
-        }
+      try {
+        validatePredictionParams(this.prediction, params);
+
         await this.apiClient.predictions.resolvePrediction(
           this.config.twitchUserId,
           this.prediction.id,
-          this.prediction.outcomes[outcomeIndex - 1].id,
+          this.prediction.outcomes[parseInt(params[1]) - 1].id,
         );
-      } else {
-        context.reply(
-          "Usage: '!prediction resolve 2' will resolve the prediction with the second outcome.",
-        );
+      } catch (e) {
+        this.errorHandler(e, context.msg.id);
       }
     } else {
-      await this.apiClient.predictions
-        .createPrediction(this.config.twitchUserId, {
-          title: 'Win the next game?',
-          outcomes: ['Yes', 'No'],
-          autoLockAfter: 60,
-        })
-        .then((prediction) => (this.prediction = prediction))
-        .catch((e) => this.errorHandler(e, context.msg.id));
+      this.createPrediction(context);
     }
+  };
+
+  createPrediction = async (context: BotCommandContext) => {
+    return await this.apiClient.predictions
+      .createPrediction(this.config.twitchUserId, {
+        title: 'Win the next game?',
+        outcomes: ['Yes', 'No'],
+        autoLockAfter: 60,
+      })
+      .then((prediction) => (this.prediction = prediction))
+      .catch((e) => this.errorHandler(e, context.msg.id));
   };
 
   pollHandler = async (_params: string[], context: BotCommandContext) => {
