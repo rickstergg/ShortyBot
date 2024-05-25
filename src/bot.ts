@@ -1,6 +1,7 @@
 import {
   ApiClient,
   HelixChannelUpdate,
+  HelixCustomReward,
   HelixPoll,
   HelixPrediction,
 } from '@twurple/api';
@@ -25,6 +26,7 @@ export class ShortyBot {
   shoutouts: Shoutouts;
   prediction?: HelixPrediction;
   poll?: HelixPoll;
+  reward?: HelixCustomReward;
 
   constructor() {
     this.config = new Config();
@@ -32,6 +34,7 @@ export class ShortyBot {
 
     this.prediction = undefined;
     this.poll = undefined;
+    this.reward = undefined;
   }
 
   async initialize() {
@@ -56,6 +59,9 @@ export class ShortyBot {
         createBotCommand('valorant', this.valorantHandler),
         createBotCommand('tft', this.tftHandler),
         createBotCommand('ow2', this.ow2handler),
+
+        // Queue Redemptions
+        createBotCommand('queue', this.queueHandler),
       ],
       chatClientOptions: {
         requestMembershipEvents: true,
@@ -88,6 +94,8 @@ export class ShortyBot {
       await this.modifyStreamInfo({ title: params[0] }).then(() => {
         context.reply('Stream info updated!');
       });
+    } else {
+      context.reply('Please supply a title!');
     }
   };
 
@@ -174,6 +182,47 @@ export class ShortyBot {
       `HOLY THANK YOU @${userName} for the BIG RAID of ${viewerCount}!`,
     );
     this.bot.say(this.config.twitchUserName, `!so @${userName}`);
+  };
+
+  queueHandler = async (params: string[], context: BotCommandContext) => {
+    if (!isBroadcaster(context)) {
+      return;
+    }
+
+    if (this.reward) {
+      const redemptions =
+        await this.bot.api.channelPoints.getRedemptionsForBroadcaster(
+          this.config.twitchUserId,
+          this.reward.id,
+          'UNFULFILLED',
+          { newestFirst: false },
+        );
+
+      const users = redemptions.data.map(
+        (redemption) => redemption.userDisplayName,
+      );
+
+      if (!users.length) {
+        context.say('Queue is empty!');
+        return;
+      } else {
+        context.say(`Next: ${users.join(', ')}`);
+      }
+    } else {
+      const rewards = await this.bot.api.channelPoints.getCustomRewards(
+        this.config.twitchUserId,
+      );
+
+      const queueReward = rewards.find((reward) =>
+        reward.title.toLowerCase().includes('queue'),
+      );
+
+      if (queueReward) {
+        this.reward = queueReward;
+      } else {
+        context.say('No rewards with "queue" in the title.');
+      }
+    }
   };
 
   thanosHandler = async (_params: string[], context: BotCommandContext) => {
