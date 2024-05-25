@@ -1,9 +1,15 @@
-import { ApiClient, HelixPoll, HelixPrediction } from '@twurple/api';
+import {
+  ApiClient,
+  HelixChannelUpdate,
+  HelixPoll,
+  HelixPrediction,
+} from '@twurple/api';
 import { HttpStatusCodeError } from '@twurple/api-call';
 import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import { Auth } from './auth';
 import { Config } from './config';
 import { exemptChatters } from './constants/exemptChatters';
+import * as games from './constants/gameIds';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
 import { isBroadcaster, isMod } from './utils/permissions';
@@ -37,10 +43,19 @@ export class ShortyBot {
       commands: [
         createBotCommand('prediction', this.predictionHandler),
         createBotCommand('poll', this.pollHandler),
+        createBotCommand('clip', this.clipHandler),
+        createBotCommand('cancel', this.cancelHandler),
+
+        // ShortyBot Specific commands
         createBotCommand('reset', this.resetHandler),
         createBotCommand('thanos', this.thanosHandler),
-        createBotCommand('cancel', this.cancelHandler),
-        createBotCommand('clip', this.clipHandler),
+
+        // Title / Stream commands
+        createBotCommand('title', this.titleHandler),
+        createBotCommand('lol', this.lolhandler),
+        createBotCommand('valorant', this.valorantHandler),
+        createBotCommand('tft', this.tftHandler),
+        createBotCommand('ow2', this.ow2handler),
       ],
       chatClientOptions: {
         requestMembershipEvents: true,
@@ -66,6 +81,47 @@ export class ShortyBot {
 
   onConnect = () => {
     console.log('Bot is connected to chat!');
+  };
+
+  titleHandler = async (params: string[], context: BotCommandContext) => {
+    if (params[0].length) {
+      await this.modifyStreamInfo({ title: params[0] }).then(() => {
+        context.reply('Stream info updated!');
+      });
+    }
+  };
+
+  lolhandler = async (_params: string[], context: BotCommandContext) => {
+    await this.modifyStreamInfo({ gameId: games.LOL }).then(() =>
+      context.reply('Stream info updated!'),
+    );
+  };
+
+  ow2handler = async (_params: string[], context: BotCommandContext) => {
+    await this.modifyStreamInfo({ gameId: games.OW2 }).then(() =>
+      context.reply('Stream info updated!'),
+    );
+  };
+
+  valorantHandler = async (_params: string[], context: BotCommandContext) => {
+    await this.modifyStreamInfo({ gameId: games.VALORANT }).then(() =>
+      context.reply('Stream info updated!'),
+    );
+  };
+
+  tftHandler = async (_params: string[], context: BotCommandContext) => {
+    await this.modifyStreamInfo({ gameId: games.TFT }).then(() =>
+      context.reply('Stream info updated!'),
+    );
+  };
+
+  modifyStreamInfo = async (data: HelixChannelUpdate) => {
+    return await this.apiClient.channels.updateChannelInfo(
+      this.config.twitchUserId,
+      {
+        ...data,
+      },
+    );
   };
 
   clipHandler = async (_params: string[], context: BotCommandContext) => {
@@ -126,7 +182,7 @@ export class ShortyBot {
       return;
     }
 
-    const { data: chatters } = await this.bot.api.chat.getChatters(
+    const { data: chatters } = await this.apiClient.chat.getChatters(
       this.config.twitchUserId,
     );
 
