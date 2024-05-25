@@ -61,6 +61,7 @@ export class ShortyBot {
         createBotCommand('ow2', this.ow2handler),
 
         // Queue Redemptions
+        createBotCommand('createQueue', this.createQueueHandler),
         createBotCommand('queue', this.queueHandler),
       ],
       chatClientOptions: {
@@ -184,31 +185,12 @@ export class ShortyBot {
     this.bot.say(this.config.twitchUserName, `!so @${userName}`);
   };
 
-  queueHandler = async (params: string[], context: BotCommandContext) => {
+  queueHandler = async (_params: string[], context: BotCommandContext) => {
     if (!isBroadcaster(context)) {
       return;
     }
 
-    if (this.reward) {
-      const redemptions =
-        await this.bot.api.channelPoints.getRedemptionsForBroadcaster(
-          this.config.twitchUserId,
-          this.reward.id,
-          'UNFULFILLED',
-          { newestFirst: false },
-        );
-
-      const users = redemptions.data.map(
-        (redemption) => redemption.userDisplayName,
-      );
-
-      if (!users.length) {
-        context.say('Queue is empty!');
-        return;
-      } else {
-        context.say(`Next: ${users.join(', ')}`);
-      }
-    } else {
+    if (!this.reward) {
       const rewards = await this.bot.api.channelPoints.getCustomRewards(
         this.config.twitchUserId,
       );
@@ -221,7 +203,66 @@ export class ShortyBot {
         this.reward = queueReward;
       } else {
         context.say('No rewards with "queue" in the title.');
+        return;
       }
+    }
+
+    await this.bot.api.channelPoints
+      .getRedemptionsForBroadcaster(
+        this.config.twitchUserId,
+        this.reward.id,
+        'UNFULFILLED',
+        { newestFirst: false },
+      )
+      .then((redemptions) => {
+        const users = redemptions.data.map(
+          (redemption) => redemption.userDisplayName,
+        );
+
+        if (!users.length) {
+          context.say('Queue is empty!');
+          return;
+        } else {
+          context.say(`Next: ${users.join(', ')}`);
+        }
+      })
+      .catch((e) => this.errorHandler(e, context.msg.id));
+  };
+
+  createQueueHandler = async (
+    _params: string[],
+    context: BotCommandContext,
+  ) => {
+    if (!isBroadcaster(context)) {
+      return;
+    }
+
+    const rewards = await this.bot.api.channelPoints.getCustomRewards(
+      this.config.twitchUserId,
+    );
+
+    const queueReward = rewards.find((reward) =>
+      reward.title.toLowerCase().includes('queue'),
+    );
+
+    if (queueReward) {
+      this.reward = queueReward;
+      context.say('Queue redemption already exists!');
+    } else {
+      await this.bot.api.channelPoints
+        .createCustomReward(this.config.twitchUserId, {
+          title: 'JOIN THE QUEUE',
+          cost: 3300,
+          prompt: 'Join the Comp Queue',
+          isEnabled: true,
+        })
+        .then((reward) => {
+          this.reward = reward;
+        })
+        .catch((e) => {
+          this.reward = undefined;
+          this.errorHandler(e, context.msg.id);
+        });
     }
   };
 
