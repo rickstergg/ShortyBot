@@ -258,6 +258,7 @@ export class ShortyBot {
         })
         .then((reward) => {
           this.reward = reward;
+          context.say('Queue redemption created.');
         })
         .catch((e) => {
           this.reward = undefined;
