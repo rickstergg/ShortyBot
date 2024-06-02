@@ -97,6 +97,12 @@ describe('validParams', () => {
           validateCooldownParams(['Shen', undefined]);
         }).toThrow();
       });
+
+      it('should throw an error for an invalid spellName', () => {
+        expect(() => {
+          validateCooldownParams(['Shen', 'g']);
+        }).toThrow();
+      });
     });
 
     describe('with valid params', () => {

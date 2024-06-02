@@ -26,6 +26,10 @@ export const validateCooldownParams = (params: string[]) => {
     );
   }
 
+  if (!['q', 'w', 'e', 'r', 'Q', 'W', 'E', 'R'].includes(spellName)) {
+    throw Error("Usage: spell name has to be 'q', 'w', 'e', or 'r'.");
+  }
+
   if (haste) {
     const abilityHaste = parseInt(haste);
     if (abilityHaste < 0 || abilityHaste > 300) {
