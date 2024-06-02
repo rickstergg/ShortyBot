@@ -8,9 +8,11 @@ export class RiotClient {
   champNames: Record<string, string> | undefined;
 
   constructor() {
-    this.client = new RiotAPI(process.env.RIOT_API_KEY);
-    this.locale = RiotAPITypes.DDragon.LOCALE.en_US;
-    this.champNames = undefined;
+    if (process.env.RIOT_API_KEY) {
+      this.client = new RiotAPI(process.env.RIOT_API_KEY);
+      this.locale = RiotAPITypes.DDragon.LOCALE.en_US;
+      this.champNames = undefined;
+    }
   }
 
   async loadChamps() {

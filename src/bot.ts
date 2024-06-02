@@ -112,12 +112,12 @@ export class ShortyBot {
   };
 
   cooldownHandler = async (params: string[], context: BotCommandContext) => {
-    try {
-      if (!process.env.RIOT_API_KEY) {
-        context.say('It seems the riot api key is not setup!');
-        return;
-      }
+    if (!process.env.RIOT_API_KEY) {
+      context.say('Riot API is not setup!');
+      return;
+    }
 
+    try {
       validateCooldownParams(params);
 
       await this.league.getCooldowns(params).then((response: string) => {
