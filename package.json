@@ -7,6 +7,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@fightmegg/riot-api": "^0.0.20",
     "@twurple/api": "^7.1.0",
     "@twurple/api-call": "^7.1.0",
     "@twurple/auth": "^7.1.0",
