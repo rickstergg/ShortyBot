@@ -11,18 +11,24 @@ import { Auth } from './auth';
 import { Config } from './config';
 import { exemptChatters } from './constants/exemptChatters';
 import * as games from './constants/gameIds';
+import { RiotClient } from './riot/client';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
 import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
 import { clipEditUrl } from './utils/urls';
-import { validatePredictionParams } from './utils/validParams';
+import {
+  validateCooldownParams,
+  validatePredictionParams,
+} from './utils/validParams';
 
 export class ShortyBot {
   config: Config;
   auth: Auth;
   apiClient: ApiClient;
   bot: Bot;
+  league: RiotClient;
+
   shoutouts: Shoutouts;
   prediction?: HelixPrediction;
   poll?: HelixPoll;
@@ -31,6 +37,7 @@ export class ShortyBot {
   constructor() {
     this.config = new Config();
     this.auth = new Auth(this.config);
+    this.league = new RiotClient();
 
     this.prediction = undefined;
     this.poll = undefined;
@@ -63,6 +70,9 @@ export class ShortyBot {
         // Queue Redemptions
         createBotCommand('createQueue', this.createQueueHandler),
         createBotCommand('queue', this.queueHandler),
+
+        // League Commands
+        createBotCommand('cd', this.cooldownHandler),
       ],
       chatClientOptions: {
         requestMembershipEvents: true,
@@ -78,6 +88,7 @@ export class ShortyBot {
 
     this.shoutouts = new Shoutouts();
     await this.shoutouts.initialize();
+    await this.league.loadChamps();
   }
 
   onMessage = ({ userName }) => {
@@ -97,6 +108,19 @@ export class ShortyBot {
       });
     } else {
       context.reply('Please supply a title!');
+    }
+  };
+
+  cooldownHandler = async (params: string[], context: BotCommandContext) => {
+    try {
+      validateCooldownParams(params);
+
+      await this.league.getCooldowns(params).then((response: string) => {
+        context.say(response);
+      });
+    } catch (e) {
+      console.log(e);
+      this.errorHandler(e, context.msg.id);
     }
   };
 
@@ -370,7 +394,7 @@ export class ShortyBot {
     } else {
       this.bot.reply(
         this.config.twitchUserName,
-        'An error occurred',
+        e.message ?? 'An error occurred',
         messageId,
       );
     }
