@@ -88,7 +88,10 @@ export class ShortyBot {
 
     this.shoutouts = new Shoutouts();
     await this.shoutouts.initialize();
-    await this.league.loadChamps();
+
+    if (process.env.RIOT_API_KEY) {
+      await this.league.loadChamps();
+    }
   }
 
   onMessage = ({ userName }) => {
