@@ -1,7 +1,10 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
 import { HelixPrediction } from '@twurple/api';
 import { HelixPredictionOutcomeData } from '@twurple/api/lib/interfaces/endpoints/prediction.external';
-import { validatePredictionParams } from './validParams';
+import {
+  validateCooldownParams,
+  validatePredictionParams,
+} from './validParams';
 
 describe('validParams', () => {
   describe('validatePredictionParams', () => {
@@ -65,6 +68,68 @@ describe('validParams', () => {
         expect(() => {
           validatePredictionParams(prediction, ['resolve', '1']);
         }).not.toThrow();
+      });
+    });
+  });
+
+  describe('validateCooldownParams', () => {
+    describe('with invalid params', () => {
+      it('should throw an error for an undefined array', () => {
+        expect(() => {
+          validateCooldownParams(undefined);
+        }).toThrow();
+      });
+
+      it('should throw an error for empty array', () => {
+        expect(() => {
+          validateCooldownParams([]);
+        }).toThrow();
+      });
+
+      it('should throw an error for an undefined championName', () => {
+        expect(() => {
+          validateCooldownParams([undefined, 'w']);
+        }).toThrow();
+      });
+
+      it('should throw an error for an undefined spellName', () => {
+        expect(() => {
+          validateCooldownParams(['Shen', undefined]);
+        }).toThrow();
+      });
+    });
+
+    describe('with valid params', () => {
+      describe('with champ name and spell name', () => {
+        it('should return successfully', () => {
+          expect(() => {
+            validateCooldownParams(['Shen', 'r']);
+          }).not.toThrow();
+        });
+      });
+
+      describe('with ability haste', () => {
+        describe('valid haste', () => {
+          it('should return successfully', () => {
+            expect(() => {
+              validateCooldownParams(['Shen', 'r', '100']);
+            }).not.toThrow();
+          });
+        });
+
+        describe('invalid haste', () => {
+          it('should throw when ability haste less than 0', () => {
+            expect(() => {
+              validateCooldownParams(['Shen', 'r', '-1']);
+            }).toThrow();
+          });
+
+          it('should throw when ability haste over 300', () => {
+            expect(() => {
+              validateCooldownParams(['Shen', 'r', '420']);
+            }).toThrow();
+          });
+        });
       });
     });
   });

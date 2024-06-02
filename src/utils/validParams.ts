@@ -17,3 +17,19 @@ export const validatePredictionParams = (
     );
   }
 };
+
+export const validateCooldownParams = (params: string[]) => {
+  const [championName, spellName, haste] = params;
+  if (!championName || !spellName) {
+    throw Error(
+      'Usage: !cd requires a valid champion and spell name, e.g. !cd shen r',
+    );
+  }
+
+  if (haste) {
+    const abilityHaste = parseInt(haste);
+    if (abilityHaste < 0 || abilityHaste > 300) {
+      throw Error('Usage: !cd requires an ability haste between 0 and 300');
+    }
+  }
+};
