@@ -11,6 +11,7 @@ import { Auth } from './auth';
 import { Config } from './config';
 import { exemptChatters } from './constants/exemptChatters';
 import * as games from './constants/gameIds';
+import { OpenAIClient } from './openai/client';
 import { RiotClient } from './riot/client';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
@@ -28,6 +29,7 @@ export class ShortyBot {
   apiClient: ApiClient;
   bot: Bot;
   league: RiotClient;
+  openai: OpenAIClient;
 
   shoutouts: Shoutouts;
   prediction?: HelixPrediction;
@@ -37,11 +39,18 @@ export class ShortyBot {
   constructor() {
     this.config = new Config();
     this.auth = new Auth(this.config);
-    this.league = new RiotClient();
 
     this.prediction = undefined;
     this.poll = undefined;
     this.reward = undefined;
+
+    if (process.env.RIOT_API_KEY) {
+      this.league = new RiotClient();
+    }
+
+    if (process.env.OPENAI_API_KEY) {
+      this.openai = new OpenAIClient();
+    }
   }
 
   async initialize() {
@@ -94,9 +103,14 @@ export class ShortyBot {
     }
   }
 
-  onMessage = ({ userName }) => {
+  onMessage = async ({ userName, text }) => {
     if (this.shoutouts.shouldShoutOut(userName)) {
-      this.bot.say(this.config.twitchUserName, `!so ${userName}`);
+      await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
+    }
+
+    if (process.env.OPENAI_API_KEY) {
+      const response = await this.openai.checkSpam(text);
+      console.log(response);
     }
   };
 
