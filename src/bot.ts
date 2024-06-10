@@ -111,6 +111,10 @@ export class ShortyBot {
   onMessage = async (message: MessageEvent) => {
     const { userId, userName, text } = message;
 
+    if (userName === this.config.twitchUserName) {
+      return;
+    }
+
     if (this.shoutouts.shouldShoutOut(userName)) {
       await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
     }
