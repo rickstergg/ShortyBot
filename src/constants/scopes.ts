@@ -13,5 +13,6 @@ export const scopes = [
   'moderator:manage:chat_messages',
   'moderator:manage:shoutouts',
   'moderator:read:chatters',
+  'moderator:read:followers',
   'user:bot',
 ];
