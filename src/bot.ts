@@ -20,6 +20,7 @@ import { OpenAIClient } from './openai/client';
 import { RiotClient } from './riot/client';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
+import { recentlyFollowed } from './utils/followTime';
 import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
 import { clipEditUrl } from './utils/urls';
@@ -125,17 +126,15 @@ export class ShortyBot {
         userId,
       );
 
-      const notFollowing = data.length === 0;
-      // 10 minutes, 60 seconds, 1000 milliseconds
-      const recentlyFollowed =
-        new Date().getTime() - data[0].followDate.getTime() < 10 * 60 * 1000;
+      const recent = recentlyFollowed(data);
 
-      if (notFollowing || recentlyFollowed) {
+      const notFollowing = data.length === 0;
+      if (notFollowing || recent) {
         if (notFollowing) {
           console.log(`User ${userName} is not following - monitoring..`);
         }
 
-        if (recentlyFollowed) {
+        if (recent) {
           console.log(`User ${userName} recently followed - monitoring..`);
         }
 
