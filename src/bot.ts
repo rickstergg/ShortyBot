@@ -6,7 +6,12 @@ import {
   HelixPrediction,
 } from '@twurple/api';
 import { HttpStatusCodeError } from '@twurple/api-call';
-import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
+import {
+  Bot,
+  BotCommandContext,
+  MessageEvent,
+  createBotCommand,
+} from '@twurple/easy-bot';
 import { Auth } from './auth';
 import { Config } from './config';
 import { exemptChatters } from './constants/exemptChatters';
@@ -103,14 +108,42 @@ export class ShortyBot {
     }
   }
 
-  onMessage = async ({ userName, text }) => {
+  onMessage = async (message: MessageEvent) => {
+    const { userId, userName, text } = message;
+
     if (this.shoutouts.shouldShoutOut(userName)) {
       await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
     }
 
     if (process.env.OPENAI_API_KEY) {
-      const response = await this.openai.checkSpam(text);
-      console.log(response);
+      const { data } = await this.bot.api.channels.getChannelFollowers(
+        this.config.twitchUserId,
+        userId,
+      );
+
+      const notFollowing = data.length === 0;
+      // 10 minutes, 60 seconds, 1000 milliseconds
+      const recentlyFollowed =
+        new Date().getTime() - data[0].followDate.getTime() < 10 * 60 * 1000;
+
+      if (notFollowing || recentlyFollowed) {
+        if (notFollowing) {
+          console.log(`User ${userName} is not following - monitoring..`);
+        }
+
+        if (recentlyFollowed) {
+          console.log(`User ${userName} recently followed - monitoring..`);
+        }
+
+        const response = await this.openai.checkSpam(text);
+        console.log(response);
+
+        if (response.isSpam) {
+          message.reply('?');
+          message.delete();
+          console.log('Deleted');
+        }
+      }
     }
   };
 
