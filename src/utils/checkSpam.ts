@@ -15,7 +15,7 @@ export type LogInput = {
   isFirst: boolean;
 };
 
-const BADGES_TO_EXEMPT = ['vip', 'broadcaster'];
+const BADGES_TO_EXEMPT = ['vip', 'broadcaster', 'partner'];
 
 export const isExempt = (badges: string[]): boolean => {
   const exemptBadges = badges.filter((badge) =>
