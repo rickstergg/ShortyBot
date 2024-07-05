@@ -11,6 +11,7 @@
     "@twurple/api": "^7.1.0",
     "@twurple/api-call": "^7.1.0",
     "@twurple/auth": "^7.1.0",
+    "@twurple/chat": "^7.1.0",
     "@twurple/easy-bot": "^7.1.0",
     "dotenv": "^16.4.5",
     "esrun": "^3.2.26",
