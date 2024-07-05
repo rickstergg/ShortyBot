@@ -6,6 +6,7 @@ import {
   HelixPrediction,
 } from '@twurple/api';
 import { HttpStatusCodeError } from '@twurple/api-call';
+import { ChatMessage } from '@twurple/chat';
 import {
   Bot,
   BotCommandContext,
@@ -20,6 +21,7 @@ import { OpenAIClient } from './openai/client';
 import { RiotClient } from './riot/client';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
+import { checkSpam } from './utils/checkSpam';
 import { recentlyFollowed } from './utils/followTime';
 import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
@@ -96,10 +98,10 @@ export class ShortyBot {
 
     this.apiClient = this.bot.api;
 
-    this.bot.onMessage(this.onMessage);
     this.bot.onConnect(this.onConnect);
     this.bot.onRaid(this.raidhandler);
     this.bot.chat.onJoin(this.joinHandler);
+    this.bot.chat.onMessage(this.onChatMessage);
 
     this.shoutouts = new Shoutouts();
     await this.shoutouts.initialize();
@@ -109,6 +111,43 @@ export class ShortyBot {
     }
   }
 
+  onChatMessage = async (
+    channel: string,
+    userName: string,
+    text: string,
+    message: ChatMessage,
+  ) => {
+    if (channel !== this.config.twitchUserName) {
+      return;
+    }
+
+    if (this.shoutouts.shouldShoutOut(userName)) {
+      await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
+    }
+
+    if (process.env.OPENAI_API_KEY) {
+      const { data } = await this.bot.api.channels.getChannelFollowers(
+        this.config.twitchUserId,
+        message.userInfo.userId,
+      );
+
+      if (checkSpam({ followerData: data, message: message })) {
+        const response = await this.openai.checkSpam(text);
+        console.log(response);
+
+        if (response.isSpam) {
+          await this.bot.reply(this.config.twitchUserName, '?', message.id);
+          await this.bot.deleteMessageById(
+            this.config.twitchUserName,
+            message.id,
+          );
+          console.log('Deleted');
+        }
+      }
+    }
+  };
+
+  /* This is the old version of onMessage, we don't get any badge info from this, so deprecated.. */
   onMessage = async (message: MessageEvent) => {
     const { userId, userName, text } = message;
 
