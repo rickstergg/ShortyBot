@@ -130,9 +130,9 @@ export class ShortyBot {
         console.log(response);
 
         if (response.isSpam) {
-          await this.bot.reply(this.config.twitchUserId, '?', message.id);
+          await this.bot.reply(this.config.twitchUserName, '?', message.id);
           await this.bot.deleteMessageById(
-            this.config.twitchUserName,
+            this.config.twitchUserId,
             message.id,
           );
           console.log('Deleted');
