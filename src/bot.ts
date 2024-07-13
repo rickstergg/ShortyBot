@@ -104,7 +104,7 @@ export class ShortyBot {
     this.bot.chat.onMessage(this.onChatMessage);
 
     this.shoutouts = new Shoutouts();
-    await this.shoutouts.initialize();
+    await this.shoutouts.initialize(this.config.twitchUserName);
 
     if (process.env.RIOT_API_KEY) {
       await this.league.loadChamps();

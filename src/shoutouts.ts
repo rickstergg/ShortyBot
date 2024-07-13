@@ -5,11 +5,17 @@ export class Shoutouts {
   streamerList: string[];
   streamersToShoutout: Set<string>;
 
-  async initialize() {
-    const streamerList = JSON.parse(await fs.readFile(streamerPath, 'utf-8'));
+  async initialize(streamerName: string) {
+    const streamerList: { streamers: string[] } = JSON.parse(
+      await fs.readFile(streamerPath, 'utf-8'),
+    );
 
     this.streamerList = streamerList.streamers;
     this.streamersToShoutout = new Set(this.streamerList);
+
+    if (this.streamersToShoutout.has(streamerName)) {
+      this.streamersToShoutout.delete(streamerName);
+    }
 
     if (!this.streamersToShoutout.size) {
       console.log('streamers list is empty!');
