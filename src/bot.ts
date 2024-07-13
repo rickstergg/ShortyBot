@@ -180,12 +180,12 @@ export class ShortyBot {
 
         await this.openai
           .checkSpam(text)
-          .then((response) => {
-            console.log(response);
+          .then(async (resp) => {
+            console.log(resp);
 
-            if (response.isSpam) {
-              message.reply('?');
-              message.delete();
+            if (resp.isSpam) {
+              await message.reply('?');
+              await message.delete();
               console.log('Deleted');
             }
           })
