@@ -7,12 +7,7 @@ import {
 } from '@twurple/api';
 import { HttpStatusCodeError } from '@twurple/api-call';
 import { ChatMessage } from '@twurple/chat';
-import {
-  Bot,
-  BotCommandContext,
-  MessageEvent,
-  createBotCommand,
-} from '@twurple/easy-bot';
+import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
 import { Auth } from './auth';
 import { Config } from './config';
 import { exemptChatters } from './constants/exemptChatters';
@@ -22,7 +17,6 @@ import { RiotClient } from './riot/client';
 import { Shoutouts } from './shoutouts';
 import { ErrorJSON } from './types/errors';
 import { checkSpam } from './utils/checkSpam';
-import { recentlyFollowed } from './utils/followTime';
 import { isBroadcaster, isMod } from './utils/permissions';
 import { randomQuote, shuffleChatters } from './utils/thanos';
 import { clipEditUrl } from './utils/urls';
@@ -136,7 +130,7 @@ export class ShortyBot {
         console.log(response);
 
         if (response.isSpam) {
-          await this.bot.reply(this.config.twitchUserName, '?', message.id);
+          await this.bot.reply(this.config.twitchUserId, '?', message.id);
           await this.bot.deleteMessageById(
             this.config.twitchUserName,
             message.id,
@@ -148,53 +142,53 @@ export class ShortyBot {
   };
 
   /* This is the old version of onMessage, we don't get any badge info from this, so deprecated.. */
-  onMessage = async (message: MessageEvent) => {
-    const { userId, userName, text } = message;
+  // onMessage = async (message: MessageEvent) => {
+  //   const { userId, userName, text } = message;
 
-    if (userName === this.config.twitchUserName) {
-      return;
-    }
+  //   if (userName === this.config.twitchUserName) {
+  //     return;
+  //   }
 
-    if (this.shoutouts.shouldShoutOut(userName)) {
-      await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
-    }
+  //   if (this.shoutouts.shouldShoutOut(userName)) {
+  //     await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
+  //   }
 
-    if (process.env.OPENAI_API_KEY) {
-      const { data } = await this.bot.api.channels.getChannelFollowers(
-        this.config.twitchUserId,
-        userId,
-      );
+  //   if (process.env.OPENAI_API_KEY) {
+  //     const { data } = await this.bot.api.channels.getChannelFollowers(
+  //       this.config.twitchUserId,
+  //       userId,
+  //     );
 
-      const recent = recentlyFollowed(data);
-      console.log('follower data for', userName, data);
+  //     const recent = recentlyFollowed(data);
+  //     console.log('follower data for', userName, data);
 
-      const notFollowing = data.length === 0;
-      if (notFollowing || recent) {
-        if (notFollowing) {
-          console.log(`User ${userName} is not following - monitoring..`);
-        }
+  //     const notFollowing = data.length === 0;
+  //     if (notFollowing || recent) {
+  //       if (notFollowing) {
+  //         console.log(`User ${userName} is not following - monitoring..`);
+  //       }
 
-        if (recent) {
-          console.log(`User ${userName} recently followed - monitoring..`);
-        }
+  //       if (recent) {
+  //         console.log(`User ${userName} recently followed - monitoring..`);
+  //       }
 
-        await this.openai
-          .checkSpam(text)
-          .then(async (resp) => {
-            console.log(resp);
+  //       await this.openai
+  //         .checkSpam(text)
+  //         .then(async (resp) => {
+  //           console.log(resp);
 
-            if (resp.isSpam) {
-              await message.reply('?');
-              await message.delete();
-              console.log('Deleted');
-            }
-          })
-          .catch((e) => {
-            console.log((e as Error).message);
-          });
-      }
-    }
-  };
+  //           if (resp.isSpam) {
+  //             await message.reply('?');
+  //             await message.delete();
+  //             console.log('Deleted');
+  //           }
+  //         })
+  //         .catch((e) => {
+  //           console.log((e as Error).message);
+  //         });
+  //     }
+  //   }
+  // };
 
   onConnect = () => {
     console.log('Bot is connected to chat!');
