@@ -166,6 +166,7 @@ export class ShortyBot {
       );
 
       const recent = recentlyFollowed(data);
+      console.log('follower data for', userName, data);
 
       const notFollowing = data.length === 0;
       if (notFollowing || recent) {
@@ -177,14 +178,20 @@ export class ShortyBot {
           console.log(`User ${userName} recently followed - monitoring..`);
         }
 
-        const response = await this.openai.checkSpam(text);
-        console.log(response);
+        await this.openai
+          .checkSpam(text)
+          .then((response) => {
+            console.log(response);
 
-        if (response.isSpam) {
-          message.reply('?');
-          message.delete();
-          console.log('Deleted');
-        }
+            if (response.isSpam) {
+              message.reply('?');
+              message.delete();
+              console.log('Deleted');
+            }
+          })
+          .catch((e) => {
+            console.log((e as Error).message);
+          });
       }
     }
   };
