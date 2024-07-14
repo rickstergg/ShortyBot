@@ -4,6 +4,7 @@ import { streamerPath } from './utils/directories';
 export class Shoutouts {
   streamerList: string[];
   streamersToShoutout: Set<string>;
+  streamerName: string;
 
   async initialize(streamerName: string) {
     const streamerList: { streamers: string[] } = JSON.parse(
@@ -12,6 +13,7 @@ export class Shoutouts {
 
     this.streamerList = streamerList.streamers;
     this.streamersToShoutout = new Set(this.streamerList);
+    this.streamerName = streamerName;
 
     if (this.streamersToShoutout.has(streamerName)) {
       this.streamersToShoutout.delete(streamerName);
@@ -24,6 +26,10 @@ export class Shoutouts {
 
   reset() {
     this.streamersToShoutout = new Set(this.streamerList);
+
+    if (this.streamersToShoutout.has(this.streamerName)) {
+      this.streamersToShoutout.delete(this.streamerName);
+    }
   }
 
   shouldShoutOut(userName: string) {
