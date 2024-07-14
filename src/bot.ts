@@ -399,7 +399,25 @@ export class ShortyBot {
       this.config.twitchUserId,
     );
 
-    const usersToSnap = shuffleChatters(chatters).slice(0, chatters.length / 2);
+    const mods = await this.bot.getMods(this.config.twitchUserName);
+    const vips = await this.bot.getVips(this.config.twitchUserName);
+
+    const exempt = [
+      ...mods.map((mod) => mod.userName),
+      ...vips.map((vip) => vip.name),
+    ];
+
+    console.log('exempt', exempt);
+
+    const snappableChatters = chatters.filter(
+      (chatter) => !exempt.includes(chatter.userName),
+    );
+
+    const usersToSnap = shuffleChatters(snappableChatters).slice(
+      0,
+      snappableChatters.length / 2,
+    );
+
     await Promise.all(
       usersToSnap.map((chatter) => {
         if (exemptChatters.includes(chatter.userName)) {
