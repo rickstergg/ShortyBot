@@ -410,7 +410,7 @@ export class ShortyBot {
       .then(([mods, vips]) => {
         exempt = [
           ...mods.map((mod) => mod.userName),
-          ...vips.map((vip) => vip.name),
+          // ...vips.map((vip) => vip.name), Even VIPs are not safe.
           ...exemptChatters,
           this.config.twitchUserName,
         ];
