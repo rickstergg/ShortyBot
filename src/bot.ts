@@ -403,11 +403,11 @@ export class ShortyBot {
 
     const requests = Promise.all([
       this.bot.getMods(this.config.twitchUserName),
-      this.bot.getVips(this.config.twitchUserName),
+      // this.bot.getVips(this.config.twitchUserName),
     ]);
 
     await requests
-      .then(([mods, vips]) => {
+      .then(([mods]) => {
         exempt = [
           ...mods.map((mod) => mod.userName),
           // ...vips.map((vip) => vip.name), Even VIPs are not safe.
