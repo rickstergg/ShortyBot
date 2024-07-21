@@ -399,44 +399,56 @@ export class ShortyBot {
       this.config.twitchUserId,
     );
 
-    const mods = await this.bot.getMods(this.config.twitchUserName);
-    const vips = await this.bot.getVips(this.config.twitchUserName);
+    let exempt = [];
 
-    const exempt = [
-      ...mods.map((mod) => mod.userName),
-      ...vips.map((vip) => vip.name),
-    ];
+    const requests = Promise.all([
+      this.bot.getMods(this.config.twitchUserName),
+      this.bot.getVips(this.config.twitchUserName),
+    ]);
 
-    console.log('exempt', exempt);
+    await requests
+      .then(([mods, vips]) => {
+        exempt = [
+          ...mods.map((mod) => mod.userName),
+          ...vips.map((vip) => vip.name),
+          ...exemptChatters,
+          this.config.twitchUserName,
+        ];
+      })
+      .catch((e) => {
+        console.log('Mods and VIPs were not able to be returned.');
+        console.log(`Error: ${(e as Error).message}`);
+      });
 
-    const snappableChatters = chatters.filter(
-      (chatter) => !exempt.includes(chatter.userName),
-    );
+    const snappableChatters = exempt.length
+      ? chatters.filter((chatter) => !exempt.includes(chatter.userName))
+      : chatters;
 
     const usersToSnap = shuffleChatters(snappableChatters).slice(
       0,
       snappableChatters.length / 2,
     );
 
-    await Promise.all(
+    Promise.all(
       usersToSnap.map((chatter) => {
-        if (exemptChatters.includes(chatter.userName)) {
-          return Promise.resolve('exempt');
-        } else {
-          return this.bot.timeout(
-            this.config.twitchUserName,
-            chatter.userName,
-            15,
-          );
-        }
+        return this.bot.timeout(
+          this.config.twitchUserName,
+          chatter.userName,
+          15,
+        );
       }),
-    );
-
-    this.bot.say(this.config.twitchUserName, randomQuote());
+    )
+      .then(() => {
+        this.bot.say(this.config.twitchUserName, randomQuote());
+      })
+      .catch((e) => {
+        console.log('It seems you went for the head this time...');
+        console.log(`Error: ${(e as Error).message}`);
+      });
   };
 
   joinHandler = (_channel: string, user: string) => {
-    console.log(user, ' has joined chat!');
+    console.log(user, 'has joined chat!');
   };
 
   resetHandler = async (_params: string[], context: BotCommandContext) => {
