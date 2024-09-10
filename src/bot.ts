@@ -66,6 +66,7 @@ export class ShortyBot {
         createBotCommand('poll', this.pollHandler),
         createBotCommand('clip', this.clipHandler),
         createBotCommand('cancel', this.cancelHandler),
+        createBotCommand('rank', this.rankHandler),
 
         // ShortyBot Specific commands
         createBotCommand('reset', this.resetHandler),
@@ -216,6 +217,25 @@ export class ShortyBot {
       await this.league.getCooldowns(params).then((response: string) => {
         context.say(response);
       });
+    } catch (e) {
+      console.log(e);
+      this.errorHandler(e, context.msg.id);
+    }
+  };
+
+  rankHandler = async (_params: string[], context: BotCommandContext) => {
+    if (!process.env.HDEV_API_KEY) {
+      context.say('Valorant API is not setup!');
+      return;
+    }
+
+    try {
+      await fetch(`https://api.henrikdev.xyz/valorant/v3/mmr/na/pc/10 Piece Chicken/Fries`, { headers: {
+        'Authorization': `${process.env.HDEV_API_KEY}`,
+        'Content-Type': 'application/json'
+      }}).then((response: any) => {
+        return response.json()
+      }).then((resp) => console.log(resp));
     } catch (e) {
       console.log(e);
       this.errorHandler(e, context.msg.id);
