@@ -237,8 +237,7 @@ export class ShortyBot {
         return response.json()
       }).then((resp) => {
         const current = resp.data.current;
-        context.reply(`${current.tier.name} - ${current.rr}`)
-        console.log(JSON.stringify(resp));
+        context.reply(`${current.tier.name} - ${current.rr}rr`)
       })
     } catch (e) {
       console.log(e);
