@@ -234,9 +234,8 @@ export class ShortyBot {
         'Authorization': `${process.env.HDEV_API_KEY}`,
         'Content-Type': 'application/json'
       }}).then((response: any) => {
-        console.log(response.json())
-        console.log(JSON.stringify(response.json()))
-      }).then((resp) => console.log(resp));
+        return response.json()
+      }).then((resp) => console.log(JSON.stringify(resp)));
     } catch (e) {
       console.log(e);
       this.errorHandler(e, context.msg.id);
