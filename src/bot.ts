@@ -126,6 +126,9 @@ export class ShortyBot {
         message.userInfo.userId,
       );
 
+      // DEBUG
+      console.log(JSON.stringify(data))
+
       if (checkSpam({ followerData: data, message: message })) {
         const response = await this.openai.checkSpam(text);
         console.log(response);
