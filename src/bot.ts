@@ -125,34 +125,20 @@ export class ShortyBot {
         this.config.twitchUserId,
       );
 
-      const followData = await this.apiClient.callApi({
-        type: 'helix',
-        url: 'helix/channels/followers',
-        query: {
-          user_id: message.userInfo.userId,
-          broadcaster_id: this.config.twitchUserId,
-        },
-      });
-
-
-      // DEBUG
-    console.log(JSON.stringify(followData))
       console.log(JSON.stringify(data))
 
+      if (checkSpam({ followerData: data, message: message })) {
+        const response = await this.openai.checkSpam(text);
 
-      // if (checkSpam({ followerData: data, message: message })) {
-      //   const response = await this.openai.checkSpam(text);
-      //   console.log(response);
-
-      //   if (response.isSpam) {
-      //     await this.bot.reply(this.config.twitchUserName, '"?" - ShortyB', message.id);
-      //     await this.bot.deleteMessageById(
-      //       this.config.twitchUserId,
-      //       message.id,
-      //     );
-      //     console.log('Deleted');
-      //   }
-      // }
+        if (response.isSpam) {
+          await this.bot.reply(this.config.twitchUserName, '"?" - ShortyB', message.id);
+          await this.bot.deleteMessageById(
+            this.config.twitchUserId,
+            message.id,
+          );
+          console.log('Deleted');
+        }
+      }
     }
   };
 
