@@ -17,4 +17,5 @@ export const scopes = [
   'moderator:read:chatters',
   'moderator:read:followers',
   'user:bot',
+  'user:read:follows',
 ];
