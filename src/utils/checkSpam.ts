@@ -1,9 +1,9 @@
-import { HelixChannelFollower } from '@twurple/api';
+import { HelixFollowedChannel } from '@twurple/api';
 import { ChatMessage } from '@twurple/chat';
 import { recentlyFollowed } from './followTime';
 
 export type CheckSpamInput = {
-  followerData: HelixChannelFollower[];
+  followerData: HelixFollowedChannel[];
   message: ChatMessage;
 };
 

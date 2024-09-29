@@ -121,27 +121,27 @@ export class ShortyBot {
     }
 
     if (process.env.OPENAI_API_KEY) {
-      const { data } = await this.bot.api.channels.getChannelFollowers(
+      const { data } = await this.bot.api.channels.getFollowedChannels(
         this.config.twitchUserId,
-        message.userInfo.userId,
       );
 
       // DEBUG
-      console.log(message.userInfo.userName, message.userInfo.userId, JSON.stringify(data))
+      console.log(JSON.stringify(data))
 
-      if (checkSpam({ followerData: data, message: message })) {
-        const response = await this.openai.checkSpam(text);
-        console.log(response);
 
-        if (response.isSpam) {
-          await this.bot.reply(this.config.twitchUserName, '?', message.id);
-          await this.bot.deleteMessageById(
-            this.config.twitchUserId,
-            message.id,
-          );
-          console.log('Deleted');
-        }
-      }
+      // if (checkSpam({ followerData: data, message: message })) {
+      //   const response = await this.openai.checkSpam(text);
+      //   console.log(response);
+
+      //   if (response.isSpam) {
+      //     await this.bot.reply(this.config.twitchUserName, '"?" - ShortyB', message.id);
+      //     await this.bot.deleteMessageById(
+      //       this.config.twitchUserId,
+      //       message.id,
+      //     );
+      //     console.log('Deleted');
+      //   }
+      // }
     }
   };
 
