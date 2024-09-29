@@ -125,7 +125,18 @@ export class ShortyBot {
         this.config.twitchUserId,
       );
 
+      const followData = await this.apiClient.callApi({
+        type: 'helix',
+        url: 'users/follows',
+        query: {
+          from_id: message.userInfo.userId,
+          to_id: this.config.twitchUserId,
+        },
+      });
+
+
       // DEBUG
+    console.log(JSON.stringify(followData))
       console.log(JSON.stringify(data))
 
 
