@@ -125,6 +125,7 @@ export class ShortyBot {
         this.config.twitchUserId,
       );
 
+      data.map((follower) => console.log(follower.userId))
       console.log(JSON.stringify(data))
 
       if (checkSpam({ followerData: data, message: message })) {
