@@ -17,7 +17,7 @@ export class OpenAIClient {
         { role: 'system', content: moderator },
         { role: 'user', content: message },
       ],
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-3.5-turbo-0125',
       response_format: { type: 'json_object' },
     });
 
