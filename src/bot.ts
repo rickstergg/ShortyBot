@@ -126,6 +126,7 @@ export class ShortyBot {
         userName
       );
 
+      console.log(data.length);
       data.map((follower) => console.log(follower.followDate, follower.userName))
 
       if (checkSpam({ followerData: data, message: message })) {
