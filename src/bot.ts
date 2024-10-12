@@ -123,10 +123,10 @@ export class ShortyBot {
     if (process.env.OPENAI_API_KEY) {
       const { data } = await this.bot.api.channels.getChannelFollowers(
         this.config.twitchUserId,
+        userName
       );
 
-      data.map((follower) => console.log(follower.userId))
-      console.log(JSON.stringify(data))
+      data.map((follower) => console.log(follower.followDate, follower.userName))
 
       if (checkSpam({ followerData: data, message: message })) {
         const response = await this.openai.checkSpam(text);
