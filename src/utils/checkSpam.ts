@@ -26,7 +26,7 @@ export const isExempt = (badges: string[]): boolean => {
 };
 
 export const log = (input: LogInput) => {
-  const { userName, badges, recent, isFollowing, isFirst } = input;
+  const { userName, badges = [], recent, isFollowing, isFirst } = input;
 
   if (isFirst) {
     console.log(`User ${userName} is sending their first message..`);
@@ -40,7 +40,7 @@ export const log = (input: LogInput) => {
     console.log(`User ${userName} recently followed, monitoring..`);
   }
 
-  if ((isFirst || !isFollowing || recent) && badges) {
+  if ((isFirst || !isFollowing || recent) && badges.length) {
     console.log(`User ${userName} has the following badges: ${badges}`);
   }
 };
