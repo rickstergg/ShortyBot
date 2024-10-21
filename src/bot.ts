@@ -126,8 +126,7 @@ export class ShortyBot {
         userName
       );
 
-      console.log(data.length);
-      data.map((follower) => console.log(follower.followDate, follower.userName))
+      data.map((follower) => console.log('follower', follower.userName, follower.followDate))
 
       if (checkSpam({ followerData: data, message: message })) {
         const response = await this.openai.checkSpam(text);
@@ -138,7 +137,7 @@ export class ShortyBot {
             this.config.twitchUserId,
             message.id,
           );
-          console.log('Deleted');
+          console.log('Deleted', message.text, 'from', userName);
         }
       }
     }
