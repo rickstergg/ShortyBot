@@ -130,6 +130,7 @@ export class ShortyBot {
         const response = await this.openai.checkSpam(text);
 
         if (response.isSpam) {
+          console.log('Spam detected', response.message, response.reasons);
           await this.bot.reply(this.config.twitchUserName, '"?" - ShortyB', message.id);
           await this.bot.deleteMessageById(
             this.config.twitchUserId,
