@@ -123,7 +123,7 @@ export class ShortyBot {
     if (process.env.OPENAI_API_KEY) {
       const { data } = await this.bot.api.channels.getChannelFollowers(
         this.config.twitchUserId,
-        userName
+        message.userInfo.userId,
       );
 
       console.log(this.config.twitchUserId, userName, data.length);
