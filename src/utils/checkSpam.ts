@@ -50,11 +50,14 @@ export const checkSpam = (input: CheckSpamInput): boolean => {
   const badges = Array.from(message.userInfo.badges.keys());
 
   if (isExempt(badges)) {
+    console.log('User is exempt', message.userInfo.displayName);
     return false;
   }
 
-  const notFollowing = followerData.length === 0;
+  const notFollowing = followerData.length === 0 ? true : false;
   if (notFollowing) {
+    console.log(followerData.length)
+    followerData.map((follower) => console.log('follower', follower.userName, follower.followDate))
     return true;
   }
 
