@@ -1,4 +1,4 @@
-import { HelixChannelFollower, HelixFollowedChannel } from '@twurple/api';
+import { HelixChannelFollower } from '@twurple/api';
 import { ChatMessage } from '@twurple/chat';
 import { recentlyFollowed } from './followTime';
 
@@ -11,7 +11,7 @@ export type LogInput = {
   userName: string;
   badges: string[];
   recent: boolean;
-  notFollowing: boolean;
+  isFollowing: boolean;
   isFirst: boolean;
 };
 
@@ -26,13 +26,13 @@ export const isExempt = (badges: string[]): boolean => {
 };
 
 export const log = (input: LogInput) => {
-  const { userName, badges, recent, notFollowing, isFirst } = input;
+  const { userName, badges, recent, isFollowing, isFirst } = input;
 
   if (isFirst) {
     console.log(`User ${userName} is sending their first message..`);
   }
 
-  if (!notFollowing) {
+  if (!isFollowing) {
     console.log(`User ${userName} is not following - monitoring..`);
   }
 
@@ -40,7 +40,7 @@ export const log = (input: LogInput) => {
     console.log(`User ${userName} recently followed, monitoring..`);
   }
 
-  if ((isFirst || !notFollowing || recent) && badges) {
+  if ((isFirst || !isFollowing || recent) && badges) {
     console.log(`User ${userName} has the following badges: ${badges}`);
   }
 };
@@ -54,22 +54,16 @@ export const checkSpam = (input: CheckSpamInput): boolean => {
     return false;
   }
 
-  const notFollowing = followerData.length === 0 ? true : false;
-  if (notFollowing) {
-    console.log(followerData.length)
-    followerData.map((follower) => console.log('follower', follower.userName, follower.followDate))
-    return true;
-  }
-
+  const isFollowing = followerData.length > 0;
   const recent = recentlyFollowed(followerData);
 
   log({
     userName: message.userInfo.displayName,
     badges,
     recent,
-    notFollowing,
+    isFollowing,
     isFirst: message.isFirst,
   });
 
-  return recent || message.isFirst;
+  return recent || !isFollowing || message.isFirst;
 };
