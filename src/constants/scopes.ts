@@ -1,10 +1,12 @@
 export const scopes = [
   'channel:bot',
+  'channel:edit:commercial',
   'channel:manage:broadcast',
   'channel:manage:polls',
   'channel:manage:predictions',
   'channel:manage:redemptions',
   'channel:moderate',
+  'channel:read:ads',
   'channel:read:vips',
   'chat:edit',
   'chat:read',
