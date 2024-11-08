@@ -89,3 +89,4 @@ Now that you're ready to go, make sure you `yarn install` and then `yarn start`!
 ## Scavenger Hunt
 
 - Have you joined the [Bofu Community Discord](https://discord.gg/z2RNpYz8) or [33 Community Discord](https://discord.gg/6J4kzEP8)? There's a song you should listen to.
+- React to the "DISCONNECT OP" clip in Rickster's Clips Channel. :)
