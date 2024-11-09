@@ -137,6 +137,7 @@ export class ShortyBot {
             message.id,
           );
           console.log('Deleted', message.text, 'from', userName);
+          console.log('Spam reasons:', response.reasons);
         }
       }
     }

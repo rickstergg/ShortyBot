@@ -85,8 +85,3 @@ Now that you're ready to go, make sure you `yarn install` and then `yarn start`!
 
 - Add usernames to the array in `data/streamers.json`. This is the file responsible for providing the list of streamer names (lowercased and such, to shoutout).
 - If you run the program and it says this list is empty, chances are you either forgot to include this list, or just haven't added anybody to it. It shouldn't break, but this is noteworthy for sure.
-
-## Scavenger Hunt
-
-- Have you joined the [Bofu Community Discord](https://discord.gg/z2RNpYz8) or [33 Community Discord](https://discord.gg/6J4kzEP8)? There's a song you should listen to.
-- React to the "DISCONNECT OP" clip in Rickster's Clips Channel. :)
