@@ -1,9 +1,28 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import { Config } from './config';
+
+// Stubbed Env Vars
+const OLD_ENV = {
+  CLIENT_ID: "asdf",
+  CLIENT_SECRET: "asdf",
+  BOT_USER_ID: "123",
+  BOT_USER_NAME: "twitchUsername",
+  TWITCH_USER_ID: "123",
+  TWITCH_USER_NAME: "twitchUsername",
+  ACCESS_TOKEN: "asdf",
+  REFRESH_TOKEN: "asdf",
+  RIOT_API_KEY: "RGAPI-asdf",
+  OPENAI_API_KEY: "sk-proj-keyyy",
+};
+
 
 describe('config', () => {
   describe('initialization', () => {
     describe('with the right env vars', () => {
+      beforeAll(() => {
+        process.env = { ...OLD_ENV };
+      });
+
       it('should initialize properly', () => {
         const config = new Config();
 
@@ -18,10 +37,7 @@ describe('config', () => {
     });
 
     describe('without the proper env vars', () => {
-      const OLD_ENV = process.env;
-
       beforeEach(() => {
-        // Restore process.env before testing.
         process.env = { ...OLD_ENV };
       });
 
