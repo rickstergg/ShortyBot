@@ -1,8 +1,8 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import { RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
-import { Auth } from './auth';
-import { Config } from './config';
+import { Auth } from './auth.ts';
+import { Config } from './config.ts';
 
 const onRefresh = jest.fn();
 const addUserForToken = jest.fn();

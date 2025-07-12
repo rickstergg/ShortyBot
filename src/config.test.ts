@@ -1,20 +1,19 @@
 import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
-import { Config } from './config';
+import { Config } from './config.ts';
 
 // Stubbed Env Vars
 const OLD_ENV = {
-  CLIENT_ID: "asdf",
-  CLIENT_SECRET: "asdf",
-  BOT_USER_ID: "123",
-  BOT_USER_NAME: "twitchUsername",
-  TWITCH_USER_ID: "123",
-  TWITCH_USER_NAME: "twitchUsername",
-  ACCESS_TOKEN: "asdf",
-  REFRESH_TOKEN: "asdf",
-  RIOT_API_KEY: "RGAPI-asdf",
-  OPENAI_API_KEY: "sk-proj-keyyy",
+  CLIENT_ID: 'asdf',
+  CLIENT_SECRET: 'asdf',
+  BOT_USER_ID: '123',
+  BOT_USER_NAME: 'twitchUsername',
+  TWITCH_USER_ID: '123',
+  TWITCH_USER_NAME: 'twitchUsername',
+  ACCESS_TOKEN: 'asdf',
+  REFRESH_TOKEN: 'asdf',
+  RIOT_API_KEY: 'RGAPI-asdf',
+  OPENAI_API_KEY: 'sk-proj-keyyy',
 };
-
 
 describe('config', () => {
   describe('initialization', () => {

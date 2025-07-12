@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { scopes } from './constants/scopes';
+import { scopes } from './constants/scopes.ts';
 
 dotenv.config({
   path: path.resolve(__dirname, `../${process.env.ENVIRONMENT}.env`),

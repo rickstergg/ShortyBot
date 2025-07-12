@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { HelixChannelFollower } from '@twurple/api';
-import { recentlyFollowed } from './followTime';
+import { recentlyFollowed } from './followTime.ts';
 
 describe('recentlyFollowed', () => {
   it('should return false if there is no data', () => {

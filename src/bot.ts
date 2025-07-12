@@ -8,22 +8,22 @@ import {
 import { HttpStatusCodeError } from '@twurple/api-call';
 import { ChatMessage } from '@twurple/chat';
 import { Bot, BotCommandContext, createBotCommand } from '@twurple/easy-bot';
-import { Auth } from './auth';
-import { Config } from './config';
-import { exemptChatters } from './constants/exemptChatters';
-import * as games from './constants/gameIds';
-import { OpenAIClient } from './openai/client';
-import { RiotClient } from './riot/client';
-import { Shoutouts } from './shoutouts';
-import { ErrorJSON } from './types/errors';
-import { checkSpam } from './utils/checkSpam';
-import { isBroadcaster, isMod } from './utils/permissions';
-import { randomQuote, shuffleChatters } from './utils/thanos';
-import { clipEditUrl } from './utils/urls';
+import { Auth } from './auth.ts';
+import { Config } from './config.ts';
+import { exemptChatters } from './constants/exemptChatters.ts';
+import * as games from './constants/gameIds.ts';
+import { OpenAIClient } from './openai/client.ts';
+import { RiotClient } from './riot/client.ts';
+import { Shoutouts } from './shoutouts.ts';
+import { ErrorJSON } from './types/errors.ts';
+import { checkSpam } from './utils/checkSpam.ts';
+import { isBroadcaster, isMod } from './utils/permissions.ts';
+import { randomQuote, shuffleChatters } from './utils/thanos.ts';
+import { clipEditUrl } from './utils/urls.ts';
 import {
   validateCooldownParams,
   validatePredictionParams,
-} from './utils/validParams';
+} from './utils/validParams.ts';
 
 export class ShortyBot {
   config: Config;
@@ -131,7 +131,11 @@ export class ShortyBot {
 
         if (response.isSpam) {
           console.log('Spam detected', response.message, response.reasons);
-          await this.bot.reply(this.config.twitchUserName, '"?" - ShortyB', message.id);
+          await this.bot.reply(
+            this.config.twitchUserName,
+            '"?" - ShortyB',
+            message.id,
+          );
           await this.bot.deleteMessageById(
             this.config.twitchUserId,
             message.id,
@@ -231,15 +235,22 @@ export class ShortyBot {
     }
 
     try {
-      await fetch(`https://api.henrikdev.xyz/valorant/v3/mmr/na/pc/10 Piece Chicken/Fries`, { headers: {
-        'Authorization': `${process.env.HDEV_API_KEY}`,
-        'Content-Type': 'application/json'
-      }}).then((response: any) => {
-        return response.json()
-      }).then((resp) => {
-        const current = resp.data.current;
-        context.reply(`${current.tier.name} - ${current.rr}rr`)
-      })
+      await fetch(
+        `https://api.henrikdev.xyz/valorant/v3/mmr/na/pc/10 Piece Chicken/Fries`,
+        {
+          headers: {
+            Authorization: `${process.env.HDEV_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+        .then((response: any) => {
+          return response.json();
+        })
+        .then((resp) => {
+          const current = resp.data.current;
+          context.reply(`${current.tier.name} - ${current.rr}rr`);
+        });
     } catch (e) {
       console.log(e);
       this.errorHandler(e, context.msg.id);

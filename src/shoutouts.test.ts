@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { promises as fs } from 'fs';
-import { Shoutouts } from './shoutouts';
-import { streamerPath } from './utils/directories';
+import { Shoutouts } from './shoutouts.ts';
+import { streamerPath } from './utils/directories.ts';
 
 jest.mock('fs', () => {
   return {
@@ -37,7 +37,7 @@ describe('shoutoutManager', () => {
     it('should actively exclude the streamer from the list if it exists', () => {
       expect(manager.streamersToShoutout.has('rickstergg')).toBeFalsy();
       expect(manager.streamersToShoutout.size).toBe(2);
-    })
+    });
 
     it('should return false for a streamer not in the list', () => {
       expect(manager.shouldShoutOut('not a streamer')).toBeFalsy();

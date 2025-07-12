@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { BotCommandContext } from '@twurple/easy-bot';
-import { isBroadcaster, isMod } from './permissions';
+import { isBroadcaster, isMod } from './permissions.ts';
 
 describe('permissions', () => {
   describe('isBroadcaster', () => {

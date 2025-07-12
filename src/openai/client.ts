@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { moderator } from './prompts';
-import { SpamResponse } from './types';
+import { moderator } from './prompts.ts';
+import { SpamResponse } from './types.ts';
 
 export class OpenAIClient {
   client: OpenAI;

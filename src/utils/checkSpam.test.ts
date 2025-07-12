@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { HelixChannelFollower } from '@twurple/api';
-import { CheckSpamInput, checkSpam, isExempt } from './checkSpam';
+import { CheckSpamInput, checkSpam, isExempt } from './checkSpam.ts';
 
 // jest.mock('@twurple/chat', () => ({
 //   ChatMessage: jest.fn().mockImplementation(() => {

@@ -1,6 +1,6 @@
 import { RiotAPI, RiotAPITypes } from '@fightmegg/riot-api';
-import { cooldownsWithAbilityHaste } from '../utils/cooldown';
-import { spellNameIndexMapper } from '../utils/spellNameIndexMapper';
+import { cooldownsWithAbilityHaste } from '../utils/cooldown.ts';
+import { spellNameIndexMapper } from '../utils/spellNameIndexMapper.ts';
 
 export class RiotClient {
   locale: RiotAPITypes.DDragon.LOCALE;
