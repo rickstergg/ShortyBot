@@ -37,7 +37,7 @@ Then, click `New Secret` right below it to generate a secret. **Write this down 
 
 ShortyBot runs off of environment variables of all sorts. You can run the application by passing them in-line, or supplying them to a web-hosting platform like Heroku.
 
-Note: If you are running this locally, you may use a `prod.env` file (targetted by running `yarn start`).
+Note: If you are running this locally, you may use a `prod.env` file (targetted by running `pnpm start`).
 
 - CLIENT_ID: this is the Client ID value of the Application you just created.
 - CLIENT_SECRET: this is the Client Secret value of the Application you just created.
@@ -77,7 +77,7 @@ REFRESH_TOKEN="3145h23454hk365mn4bnm4bm345hk"
 
 # Run It Down
 
-Now that you're ready to go, make sure you `yarn install` and then `yarn start`!
+Now that you're ready to go, make sure you `pnpm install` and then `pnpm start`!
 
 # Post Setup
 

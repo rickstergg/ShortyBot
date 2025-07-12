@@ -1,1 +1,1 @@
-service: yarn start
+service: pnpm start
