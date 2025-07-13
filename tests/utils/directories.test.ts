@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { tokenPath } from './directories.ts';
+import { tokenPath } from '../../src/utils/directories.ts';
 
 describe('tokenPath', () => {
   it('should return the token path for a twitchUserId', () => {

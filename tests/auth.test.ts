@@ -1,8 +1,8 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import { RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
-import { Auth } from './auth.ts';
-import { Config } from './config.ts';
+import { Auth } from '../src/auth.ts';
+import { Config } from '../src/config.ts';
 
 const onRefresh = jest.fn();
 const addUserForToken = jest.fn();
@@ -23,7 +23,7 @@ jest.mock('fs', () => {
   };
 });
 
-jest.mock('./config', () => {
+jest.mock('../src/config', () => {
   return {
     Config: jest.fn().mockImplementation(() => {
       return {

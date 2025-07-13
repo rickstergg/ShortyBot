@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
-import { Config } from './config.ts';
+import { Config } from '../src/config.ts';
 
 // Stubbed Env Vars
 const OLD_ENV = {

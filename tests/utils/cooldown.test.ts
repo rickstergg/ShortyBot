@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { cooldownsWithAbilityHaste } from './cooldown.ts';
+import { cooldownsWithAbilityHaste } from '../../src/utils/cooldown.ts';
 
 describe('cooldownsWithAbilityHaste', () => {
   it('should return the proper cooldowns', () => {

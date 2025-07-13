@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { promises as fs } from 'fs';
-import { Shoutouts } from './shoutouts.ts';
-import { streamerPath } from './utils/directories.ts';
+import { Shoutouts } from '../src/shoutouts.ts';
+import { streamerPath } from '../src/utils/directories.ts';
 
 jest.mock('fs', () => {
   return {

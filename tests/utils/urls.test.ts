@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { clipEditUrl } from './urls.ts';
+import { clipEditUrl } from '../../src/utils/urls.ts';
 
 describe('clipEditUrl', () => {
   it('should return the clip edit url for a twitch clip id', () => {

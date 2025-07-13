@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { spellNameIndexMapper } from './spellNameIndexMapper.ts';
+import { spellNameIndexMapper } from '../../src/utils/spellNameIndexMapper.ts';
 
 describe('spellNameIndexMapper', () => {
   it('should return the index for a spell', () => {

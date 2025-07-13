@@ -1,6 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
 import { HelixChatChatter } from '@twurple/api';
-import { quotes, randomQuote, shuffleChatters } from './thanos.ts';
+import {
+  quotes,
+  randomQuote,
+  shuffleChatters,
+} from '../../src/utils/thanos.ts';
 
 describe('thanos', () => {
   describe('shuffleChatters', () => {

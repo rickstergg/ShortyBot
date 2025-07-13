@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 // import type { HelixPredictionOutcomeData } from '@twurple/api/lib/interfaces/endpoints/prediction.external';
-import { validateCooldownParams } from './validParams.ts';
+import { validateCooldownParams } from '../../src/utils/validParams.ts';
 
 // TODO: Fix this typing issue, it's due to the fact that we can't import the HelixPredictionOutcomeData type from the @twurple/api package.
 // Things might have changed in the two minor versions, which might have introduced new types.
