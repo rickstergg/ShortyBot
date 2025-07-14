@@ -14,7 +14,7 @@
     "@twurple/chat": "^7.3.0",
     "@twurple/easy-bot": "^7.3.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.5",
+    "dotenv": "^17.2.0",
     "esrun": "^3.2.26",
     "openai": "^5.9.0"
   },
