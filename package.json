@@ -15,11 +15,10 @@
     "@twurple/easy-bot": "^7.3.0",
     "cross-env": "^7.0.3",
     "dotenv": "^17.2.0",
-    "esrun": "^3.2.26",
     "openai": "^5.9.0"
   },
   "scripts": {
-    "start": "cross-env ENVIRONMENT=prod pnpm exec esrun index.ts",
+    "start": "cross-env ENVIRONMENT=prod pnpm exec tsx index.ts",
     "test": "cross-env ENVIRONMENT=test pnpm exec jest",
     "typecheck": "tsc --noEmit"
   },
@@ -33,6 +32,7 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.4.5"
   }
 }

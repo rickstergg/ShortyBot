@@ -1,10 +1,15 @@
 import * as dotenv from 'dotenv';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { scopes } from './constants/scopes.ts';
 
 dotenv.config({
-  path: path.resolve(__dirname, `../${process.env.ENVIRONMENT}.env`),
+  path: path.resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    `../${process.env.ENVIRONMENT}.env`,
+  ),
 });
 
 export class Config {
