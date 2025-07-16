@@ -15,7 +15,7 @@
     "@twurple/easy-bot": "^7.3.0",
     "cross-env": "^7.0.3",
     "dotenv": "^17.2.0",
-    "openai": "^5.9.0"
+    "openai": "^5.9.2"
   },
   "scripts": {
     "start": "cross-env ENVIRONMENT=prod pnpm exec tsx index.ts",
