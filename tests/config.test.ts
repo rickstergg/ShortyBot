@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { Config } from '../src/config.ts';
 
 // Stubbed Env Vars

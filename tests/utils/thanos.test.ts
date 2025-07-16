@@ -1,5 +1,5 @@
-import { describe, expect, it } from '@jest/globals';
 import { HelixChatChatter } from '@twurple/api';
+import { describe, expect, it } from 'vitest';
 import {
   quotes,
   randomQuote,

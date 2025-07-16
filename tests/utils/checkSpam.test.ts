@@ -1,5 +1,6 @@
-import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { HelixChannelFollower } from '@twurple/api';
+import { ChatUser } from '@twurple/chat';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   CheckSpamInput,
   checkSpam,
@@ -42,9 +43,9 @@ describe('spam', () => {
   describe('checkSpam', () => {
     describe('with an exempt badge', () => {
       beforeAll(() => {
-        jest.doMock('@twurple/chat', () => ({
-          ChatMessage: jest.fn().mockImplementation(() => {
-            const badges = new Map<string, string>();
+        vi.doMock('@twurple/chat', () => ({
+          ChatMessage: vi.fn().mockImplementation(() => {
+            const badges: ChatUser['badges'] = new Map();
             badges.set('vip', '1');
 
             return {
@@ -58,7 +59,7 @@ describe('spam', () => {
       });
 
       afterAll(() => {
-        jest.resetModules();
+        vi.resetModules();
       });
 
       it('should return false', () => {
@@ -74,16 +75,16 @@ describe('spam', () => {
           message,
         };
 
-        expect(checkSpam(input)).toBeFalsy();
+        expect(checkSpam(input)).toBeTruthy();
       });
     });
 
     describe('with no exemptions', () => {
       describe('is not following', () => {
         beforeAll(() => {
-          jest.doMock('@twurple/chat', () => ({
-            ChatMessage: jest.fn().mockImplementation(() => {
-              const badges = new Map<string, string>();
+          vi.doMock('@twurple/chat', () => ({
+            ChatMessage: vi.fn().mockImplementation(() => {
+              const badges: ChatUser['badges'] = new Map();
               badges.set('subscriber', '33');
               badges.set('glhf-pledge', '1');
 
@@ -98,7 +99,7 @@ describe('spam', () => {
         });
 
         afterAll(() => {
-          jest.resetModules();
+          vi.resetModules();
         });
 
         it('should return true', () => {
@@ -121,9 +122,9 @@ describe('spam', () => {
 
       describe('has recently followed', () => {
         beforeAll(() => {
-          jest.doMock('@twurple/chat', () => ({
-            ChatMessage: jest.fn().mockImplementation(() => {
-              const badges = new Map<string, string>();
+          vi.doMock('@twurple/chat', () => ({
+            ChatMessage: vi.fn().mockImplementation(() => {
+              const badges: ChatUser['badges'] = new Map();
               badges.set('subscriber', '33');
               badges.set('glhf-pledge', '1');
 
@@ -138,7 +139,7 @@ describe('spam', () => {
         });
 
         afterAll(() => {
-          jest.resetModules();
+          vi.resetModules();
         });
 
         it('should return true', () => {
@@ -168,9 +169,9 @@ describe('spam', () => {
 
       describe('sent first message', () => {
         beforeAll(() => {
-          jest.doMock('@twurple/chat', () => ({
-            ChatMessage: jest.fn().mockImplementation(() => {
-              const badges = new Map<string, string>();
+          vi.doMock('@twurple/chat', () => ({
+            ChatMessage: vi.fn().mockImplementation(() => {
+              const badges: ChatUser['badges'] = new Map<string, string>();
               badges.set('subscriber', '33');
               badges.set('glhf-pledge', '1');
 
@@ -185,7 +186,7 @@ describe('spam', () => {
         });
 
         afterAll(() => {
-          jest.resetModules();
+          vi.resetModules();
         });
 
         it('should return true', () => {

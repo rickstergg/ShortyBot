@@ -19,20 +19,17 @@
   },
   "scripts": {
     "start": "cross-env ENVIRONMENT=prod pnpm exec tsx index.ts",
-    "test": "cross-env ENVIRONMENT=test pnpm exec jest",
+    "test": "cross-env ENVIRONMENT=test pnpm exec vitest",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
-    "@jest/globals": "^29.7.0",
     "@types/node": "^22.13.5",
     "eslint-config-prettier": "^9.1.0",
-    "jest": "^29.7.0",
     "prettier": "3.2.5",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^3.2.4"
   }
 }

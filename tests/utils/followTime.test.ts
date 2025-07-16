@@ -1,5 +1,5 @@
-import { describe, expect, it } from '@jest/globals';
 import { HelixChannelFollower } from '@twurple/api';
+import { describe, expect, it } from 'vitest';
 import { recentlyFollowed } from '../../src/utils/followTime.ts';
 
 describe('recentlyFollowed', () => {

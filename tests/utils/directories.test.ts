@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from 'vitest';
 import { tokenPath } from '../../src/utils/directories.ts';
 
 describe('tokenPath', () => {

@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from 'vitest';
 // import type { HelixPredictionOutcomeData } from '@twurple/api/lib/interfaces/endpoints/prediction.external';
 import { validateCooldownParams } from '../../src/utils/validParams.ts';
 

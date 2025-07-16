@@ -1,12 +1,12 @@
-import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { promises as fs } from 'fs';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { Shoutouts } from '../src/shoutouts.ts';
 import { streamerPath } from '../src/utils/directories.ts';
 
-jest.mock('fs', () => {
+vi.mock('fs', () => {
   return {
     promises: {
-      readFile: jest.fn().mockImplementation(() => {
+      readFile: vi.fn().mockImplementation(() => {
         return JSON.stringify({
           streamers: ['rickstergg', 'qqobes33', 'fadeddice'],
         });

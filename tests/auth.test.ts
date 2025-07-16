@@ -1,16 +1,16 @@
-import { describe, expect, it, jest } from '@jest/globals';
 import { RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
+import { describe, expect, it, vi } from 'vitest';
 import { Auth } from '../src/auth.ts';
 import { Config } from '../src/config.ts';
 
-const onRefresh = jest.fn();
-const addUserForToken = jest.fn();
+const onRefresh = vi.fn();
+const addUserForToken = vi.fn();
 
-jest.mock('fs', () => {
+vi.mock('fs', () => {
   return {
     promises: {
-      readFile: jest.fn().mockImplementation(() => {
+      readFile: vi.fn().mockImplementation(() => {
         return JSON.stringify({
           accessToken: 'asdf',
           expiresIn: 0,
@@ -23,9 +23,9 @@ jest.mock('fs', () => {
   };
 });
 
-jest.mock('../src/config', () => {
+vi.mock('../src/config', () => {
   return {
-    Config: jest.fn().mockImplementation(() => {
+    Config: vi.fn().mockImplementation(() => {
       return {
         clientId: 'client_id',
         clientSecret: 'secret',
@@ -34,9 +34,9 @@ jest.mock('../src/config', () => {
   };
 });
 
-jest.mock('@twurple/auth', () => {
+vi.mock('@twurple/auth', () => {
   return {
-    RefreshingAuthProvider: jest.fn().mockImplementation(() => {
+    RefreshingAuthProvider: vi.fn().mockImplementation(() => {
       return {
         onRefresh,
         addUserForToken,
