@@ -28,7 +28,11 @@
     "test": "cross-env ENVIRONMENT=test pnpm exec vitest",
     "typecheck": "tsc --noEmit",
     "docker:build": "docker build -t shortybot .",
-    "docker:run": "docker run shortybot"
+    "docker:run": "docker run --env-file ./prod.env shortybot",
+    "docker:run:dev": "docker run --env-file ./dev.env shortybot",
+    "docker:clean": "docker system prune -f",
+    "docker:clean:all": "docker system prune -a -f",
+    "docker:clean:images": "docker image prune -a -f"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
