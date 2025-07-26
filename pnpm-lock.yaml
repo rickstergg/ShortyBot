@@ -33,33 +33,33 @@ importers:
         specifier: ^17.2.1
         version: 17.2.1
       openai:
-        specifier: ^5.9.2
-        version: 5.9.2(ws@8.18.3)
+        specifier: ^5.10.2
+        version: 5.10.2(ws@8.18.3)
       temporal-polyfill:
         specifier: ^0.3.0
         version: 0.3.0
     devDependencies:
       '@eslint/js':
-        specifier: ^9.0.0
-        version: 9.3.0
+        specifier: ^9.32.0
+        version: 9.32.0
       '@types/node':
         specifier: ^22.13.5
         version: 22.13.5
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@9.3.0)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.3.0)
       prettier:
-        specifier: 3.2.5
-        version: 3.2.5
+        specifier: 3.6.2
+        version: 3.6.2
       prettier-plugin-organize-imports:
-        specifier: ^4.1.0
-        version: 4.1.0(prettier@3.2.5)(typescript@5.4.5)
+        specifier: ^4.2.0
+        version: 4.2.0(prettier@3.6.2)(typescript@5.8.3)
       tsx:
         specifier: ^4.20.3
         version: 4.20.3
       typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
+        specifier: ^5.8.3
+        version: 5.8.3
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.13.5)(tsx@4.20.3)
@@ -281,6 +281,10 @@ packages:
 
   '@eslint/js@9.3.0':
     resolution: {integrity: sha512-niBqk8iwv96+yuTwjM6bWg8ovzAPF9qkICsGtcoa5/dmqcEMfdwNAX7+/OHcJHc7wj7XqPxH98oAHytFYlw6Sw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.32.0':
+    resolution: {integrity: sha512-BBpRFZK3eX6uMLKz8WxFOBIFFcGFJ/g8XuwjTHCqHROSIsopI+ddn/d5Cfh36+7+e5edVS8dbSHnBNhrLEX0zg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@fightmegg/riot-api@0.0.20':
@@ -615,8 +619,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-prettier@9.1.0:
-    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+  eslint-config-prettier@10.1.8:
+    resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -823,8 +827,8 @@ packages:
       encoding:
         optional: true
 
-  openai@5.9.2:
-    resolution: {integrity: sha512-d7t/lRkwZpSwIk7GW3EHRSGAlsuoi1WL6VhCO02raEzZO2ahEVAbWn3WmOcpeh9zF6xF9weJXoVeDkWJRz+SHA==}
+  openai@5.10.2:
+    resolution: {integrity: sha512-n+vi74LzHtvlKcDPn9aApgELGiu5CwhaLG40zxLTlFQdoSJCLACORIPC2uVQ3JEYAbqapM+XyRKFy2Thej7bIw==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -884,18 +888,18 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier-plugin-organize-imports@4.1.0:
-    resolution: {integrity: sha512-5aWRdCgv645xaa58X8lOxzZoiHAldAPChljr/MT0crXVOWTZ+Svl4hIWlz+niYSlO6ikE5UXkN1JrRvIP2ut0A==}
+  prettier-plugin-organize-imports@4.2.0:
+    resolution: {integrity: sha512-Zdy27UhlmyvATZi67BTnLcKTo8fm6Oik59Sz6H64PgZJVs6NJpPD1mT240mmJn62c98/QaL+r3kx9Q3gRpDajg==}
     peerDependencies:
       prettier: '>=2.0'
       typescript: '>=2.9'
-      vue-tsc: ^2.1.0
+      vue-tsc: ^2.1.0 || 3
     peerDependenciesMeta:
       vue-tsc:
         optional: true
 
-  prettier@3.2.5:
-    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -1022,8 +1026,8 @@ packages:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
 
-  typescript@5.4.5:
-    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1302,6 +1306,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@9.3.0': {}
+
+  '@eslint/js@9.32.0': {}
 
   '@fightmegg/riot-api@0.0.20':
     dependencies:
@@ -1669,7 +1675,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-prettier@9.1.0(eslint@9.3.0):
+  eslint-config-prettier@10.1.8(eslint@9.3.0):
     dependencies:
       eslint: 9.3.0
 
@@ -1889,7 +1895,7 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
-  openai@5.9.2(ws@8.18.3):
+  openai@5.10.2(ws@8.18.3):
     optionalDependencies:
       ws: 8.18.3
 
@@ -1936,12 +1942,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-organize-imports@4.1.0(prettier@3.2.5)(typescript@5.4.5):
+  prettier-plugin-organize-imports@4.2.0(prettier@3.6.2)(typescript@5.8.3):
     dependencies:
-      prettier: 3.2.5
-      typescript: 5.4.5
+      prettier: 3.6.2
+      typescript: 5.8.3
 
-  prettier@3.2.5: {}
+  prettier@3.6.2: {}
 
   punycode@2.3.1: {}
 
@@ -2059,7 +2065,7 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
 
-  typescript@5.4.5: {}
+  typescript@5.8.3: {}
 
   undici-types@6.20.0: {}
 
