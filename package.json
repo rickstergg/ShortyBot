@@ -28,7 +28,7 @@
     "test": "cross-env ENVIRONMENT=test pnpm exec vitest",
     "typecheck": "tsc --noEmit",
     "docker:build": "docker build -t shortybot .",
-    "docker:run": "docker run -p 3000:3000 shortybot"
+    "docker:run": "docker run shortybot"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
