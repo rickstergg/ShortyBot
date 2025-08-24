@@ -4,8 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "docker:build": "docker build -f apps/bot/dockerfile -t shortybot .",
-    "docker:build:bot": "docker build -f apps/bot/dockerfile -t shortybot .",
-    "docker:run": "docker run --rm shortybot",
+    "docker:run": "docker run --env-file apps/bot/.env shortybot",
     "start": "turbo run start --filter=@shorty/bot",
     "start:bot": "turbo run start --filter=@shorty/bot",
     "test": "turbo run test",

@@ -1,8 +1,9 @@
-version: "3"
-
 services:
   bot:
-    build: .
+    build:
+      context: .
+      dockerfile: apps/bot/dockerfile
+    container_name: shortybot
     env_file: apps/bot/.env # Load from per-service .env (excluded from Git)
 
 # Note: Create a .env file from .env.example and ensure it's not committed.
