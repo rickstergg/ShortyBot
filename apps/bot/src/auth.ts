@@ -1,4 +1,4 @@
-import { AccessToken, RefreshingAuthProvider } from '@twurple/auth';
+import { type AccessToken, RefreshingAuthProvider } from '@twurple/auth';
 import { promises as fs } from 'fs';
 import { Config } from './config.ts';
 import { tokenPath } from './utils/directories.ts';
