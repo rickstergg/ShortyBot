@@ -115,6 +115,7 @@ export class ShortyBot {
     if (channel !== this.config.twitchUserName) {
       return;
     }
+    console.log('onChatMessage', channel, userName, text, message);
 
     if (this.shoutouts.shouldShoutOut(userName)) {
       await this.bot.say(this.config.twitchUserName, `!so ${userName}`);
