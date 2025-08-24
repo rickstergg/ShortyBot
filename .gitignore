@@ -1,9 +1,12 @@
 node_modules
-apps/bot/*.env
-apps/bot/env.local
-apps/bot/data/tokens.*.json
-
 .DS_Store
 data/.DS_Store
-
 .turbo
+
+# Bot Tokens
+apps/bot/data/tokens.*.json
+
+# Environment files
+apps/*/.env
+
+
