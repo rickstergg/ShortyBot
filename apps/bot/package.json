@@ -28,7 +28,7 @@
     "typecheck": "tsc --noEmit",
     "docker:build": "echo 'Use: pnpm docker:build from root directory'",
     "docker:run": "docker run --env-file ./prod.env shortybot",
-    "docker:run:dev": "docker run --env-file ./dev.env shortybot",
+    "docker:run:local": "docker run --env-file ./env.local shortybot",
     "docker:clean": "docker system prune -f",
     "docker:clean:all": "docker system prune -a -f",
     "docker:clean:images": "docker image prune -a -f"

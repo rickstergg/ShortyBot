@@ -1,7 +1,6 @@
 node_modules
-
-# Shortybot
 apps/bot/*.env
+apps/bot/env.local
 apps/bot/data/tokens.*.json
 
 .DS_Store
