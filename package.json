@@ -7,7 +7,8 @@
     "docker:run": "docker run --rm shortybot",
     "start": "turbo run start --filter=@shorty/bot",
     "test": "turbo run test",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "turbo": "^1.10.0"
