@@ -435,7 +435,7 @@ export class ShortyBot {
       this.config.twitchUserId,
     );
 
-    let exempt = [];
+    let exempt: string[] = [];
 
     const requests = Promise.all([
       this.bot.getMods(this.config.twitchUserName),
