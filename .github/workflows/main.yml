@@ -16,7 +16,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Bot Docker Build
-        run: pnpm --filter @shorty/bot docker:build
+        run: pnpm docker:build
   test:
     runs-on: ubuntu-latest
     steps:

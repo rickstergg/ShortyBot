@@ -3,10 +3,13 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "docker:build": "docker build -f apps/bot/Dockerfile -t shortybot .",
+    "docker:build": "docker build -f apps/bot/dockerfile -t shortybot .",
+    "docker:build:bot": "docker build -f apps/bot/dockerfile -t shortybot .",
     "docker:run": "docker run --rm shortybot",
     "start": "turbo run start --filter=@shorty/bot",
+    "start:bot": "turbo run start --filter=@shorty/bot",
     "test": "turbo run test",
+    "test:bot": "turbo run test --filter=@shorty/bot",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck"
   },

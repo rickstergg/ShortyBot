@@ -26,7 +26,7 @@
     "dev": "pnpm exec tsx index.ts",
     "test": "cross-env ENVIRONMENT=test pnpm exec vitest",
     "typecheck": "tsc --noEmit",
-    "docker:build": "docker build -t shortybot .",
+    "docker:build": "echo 'Use: pnpm docker:build from root directory'",
     "docker:run": "docker run --env-file ./prod.env shortybot",
     "docker:run:dev": "docker run --env-file ./dev.env shortybot",
     "docker:clean": "docker system prune -f",
