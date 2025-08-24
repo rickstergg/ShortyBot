@@ -2,7 +2,7 @@ import { HelixChannelFollower } from '@twurple/api';
 import { ChatUser } from '@twurple/chat';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
-  CheckSpamInput,
+  type CheckSpamInput,
   checkSpam,
   isExempt,
 } from '../../src/utils/checkSpam.ts';

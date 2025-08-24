@@ -1,5 +1,10 @@
 node_modules
-prod.env
-data/tokens.*.json
+
+# Shortybot
+apps/bot/*.env
+apps/bot/data/tokens.*.json
+
 .DS_Store
 data/.DS_Store
+
+.turbo

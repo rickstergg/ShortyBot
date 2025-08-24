@@ -1,47 +1,16 @@
 {
-  "name": "shortybot",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:rickstergg/ShortyBot.git",
-  "author": "Rick Zhang <rickzhang@live.ca>",
-  "license": "MIT",
-  "type": "module",
-  "packageManager": "pnpm@10.13.1",
-  "engines": {
-    "node": "22.17.0",
-    "pnpm": "10.13.1"
-  },
-  "dependencies": {
-    "@fightmegg/riot-api": "^0.0.20",
-    "@twurple/api": "^7.3.0",
-    "@twurple/api-call": "^7.3.0",
-    "@twurple/auth": "^7.3.0",
-    "@twurple/chat": "^7.3.0",
-    "@twurple/easy-bot": "^7.3.0",
-    "cross-env": "^10.0.0",
-    "dotenv": "^17.2.1",
-    "openai": "^5.10.2",
-    "temporal-polyfill": "^0.3.0"
-  },
+  "name": "@shorty/mono",
+  "private": true,
   "scripts": {
-    "start": "cross-env ENVIRONMENT=prod pnpm exec tsx index.ts",
-    "test": "cross-env ENVIRONMENT=test pnpm exec vitest",
-    "typecheck": "tsc --noEmit",
-    "docker:build": "docker build -t shortybot .",
-    "docker:run": "docker run --env-file ./prod.env shortybot",
-    "docker:run:dev": "docker run --env-file ./dev.env shortybot",
-    "docker:clean": "docker system prune -f",
-    "docker:clean:all": "docker system prune -a -f",
-    "docker:clean:images": "docker image prune -a -f"
+    "build": "turbo run build",
+    "docker:build": "docker build -f apps/bot/Dockerfile -t shortybot .",
+    "docker:run": "docker run --rm shortybot",
+    "start": "turbo run start --filter=@shorty/bot",
+    "test": "turbo run test",
+    "lint": "turbo run lint"
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
-    "@types/node": "^22.13.5",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "3.6.2",
-    "prettier-plugin-organize-imports": "^4.2.0",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
-  }
+    "turbo": "^1.10.0"
+  },
+  "packageManager": "pnpm@10.13.1"
 }
