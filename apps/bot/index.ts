@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { ShortyBot } from './src/bot.ts';
 
 const shortyBot = new ShortyBot();

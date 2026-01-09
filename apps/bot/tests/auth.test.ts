@@ -25,7 +25,7 @@ vi.mock('fs', () => {
 
 vi.mock('../src/config', () => {
   return {
-    Config: vi.fn().mockImplementation(() => {
+    Config: vi.fn().mockImplementation(function () {
       return {
         clientId: 'client_id',
         clientSecret: 'secret',
@@ -36,7 +36,7 @@ vi.mock('../src/config', () => {
 
 vi.mock('@twurple/auth', () => {
   return {
-    RefreshingAuthProvider: vi.fn().mockImplementation(() => {
+    RefreshingAuthProvider: vi.fn().mockImplementation(function () {
       return {
         onRefresh,
         addUserForToken,

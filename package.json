@@ -15,7 +15,7 @@
     "docker:compose:down": "docker-compose -f docker-compose.yml down"
   },
   "devDependencies": {
-    "turbo": "^1.10.0"
+    "turbo": "^2.7.3"
   },
   "packageManager": "pnpm@10.13.1"
 }
